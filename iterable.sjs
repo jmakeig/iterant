@@ -73,9 +73,9 @@ Object.assign(Iterable, {
     // Shortcut to the underlying Sequence implementation
     if(iterable instanceof Sequence) {
       if(end) {
-        yield* fn.subsequence(iterable, begin + 1, end - begin + 1);
+        yield* fn.subsequence(iterable, begin + 1, end - begin);
       } else {
-        yield* fn.subsequence(iterable, begin + 1);
+        yield* fn.subsequence(iterable, begin);
       }
     } else {
       let index = 0;
@@ -96,7 +96,14 @@ Object.assign(Iterable, {
         yield item;
       }
     }
-  }
+  },
+  forEach: function*(iterable, fct, that) {
+    if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
+    if('function' !== typeof fct) { throw new TypeError('predicate must be a function'); }
+    for(let item of iterable) {
+      yield item.call(that || null);
+    }
+  },
 });
 
 Object.assign(Iterable.prototype, {
@@ -112,7 +119,7 @@ Object.assign(Iterable.prototype, {
   // TODO: What if the reducer returns an iterable?
   reduce: function(fct, init) {
     if(Array.isArray(this._iterable)) {
-      return this._iterable = this._iterable.reduce(fct, init);
+      return this._iterable.reduce(fct, init);
     } else {
       return Iterable.reduce(this, fct, init);
     }
@@ -125,6 +132,11 @@ Object.assign(Iterable.prototype, {
     }
     return this;
   },
+  /**
+   * `filter` is almost always better implemented as an upstream query when 
+   * you’re working with data from a database.
+   *
+   */
   filter: function(predicate, that) {
     if(Array.isArray(this._iterable)) {
       this._iterable = this._iterable.filter(predicate, that);
@@ -132,6 +144,27 @@ Object.assign(Iterable.prototype, {
       this._iterable = Iterable.filter(this._iterable, predicate, that);
     }
     return this;
+  },
+  forEach: function(fct, that) {
+   if(Array.isArray(this._iterable)) {
+      this._iterable = this._iterable.filter(predicate, that);
+    } else {
+      this._iterable = Iterable.filter(this._iterable, predicate, that);
+    }
+    return this;
+  },
+  tap: function(fct, that) {
+  //??????
+  },
+  toArray: function() {
+    return Array.from(this._iterable);
+  },
+  toSequence: function() {
+    if(this._iterable instanceof Sequence) { 
+      return this._iterable;
+    } else { 
+      return Sequence.from(this._iterable);
+    }
   }
 });
 
@@ -151,34 +184,4 @@ Object.assign(Iterable.prototype, {
   }
 });
 
-Array.from(
-  Iterable(fn.collection())
-    .xpath('//*')
-    .slice(2, 3)
-    .map(x => "Item: " + x)
-    .reduce((p, c) => p + '' + c, '')
-);
-
-const itr = Iterable([1,2,3,4]);
-Array.from(
-  itr
-    .map(x => x * 2)
-    .map(x => x + 1)
-    .filter(x => x > 5)
-    .slice(1)
-);
-
-const itr2 = Iterable(Sequence.from([1,2,3,4]));
-itr2
-  .slice(1, 3)
-  .map(x => x + 7)
-  .reduce((p, c) => p + c, 0)
-
-const itr3 =  Iterable([1,2,3,4,5,6,7]);
-Array.from(
-  itr3
-    .slice(2, 5)
-    .map(x => x + 0.1)
-    .filter(x => x > 3)
-);
-
+module.exports = Iterable;
