@@ -161,6 +161,11 @@ Object.assign(Iterable.prototype, {
     }
     return this;
   },
+  sort: function(comparator) {
+    // DON'T USE THIS ON ANYTHING LARGE
+    this._iterable = Array.from(this._iterable).sort(comparator);
+    return this;
+  },
   forEach: function(fct, that) {
    if(Array.isArray(this._iterable)) {
       this._iterable = this._iterable.filter(predicate, that);
@@ -170,14 +175,10 @@ Object.assign(Iterable.prototype, {
     return this;
   },
   toArray: function() {
-    return Array.from(this._iterable);
+    return Array.from(this);
   },
   toSequence: function() {
-    if(this._iterable instanceof Sequence) { 
-      return this._iterable;
-    } else { 
-      return Sequence.from(this._iterable);
-    }
+    return Sequence.from(this);
   }
 });
 
