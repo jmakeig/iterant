@@ -31,15 +31,33 @@
  *   .reduce((prev, item) => prev + '\r' + item.count + ': ' + item.name, '');
  * 
  * @example
- * const ns = {bt: 'http://cerisent.com/bugtrack' };
- * Iterable( // Wraps any iterable
+ * const ns = { bt: 'http://example.com/bug-tracker' };
+ * // The first step is to wrap any iterable as an Iterable. (Capitalization 
+ * // is important here.) Iterable—capital “I”—abstracts away many of the 
+ * // differences between the underlying iterables.
+ * Iterable(
+ *   // Unpath (implementation elided for clarity) evaluates XPath against 
+ *   // a MarkLogic database. It returns a Sequence, MarkLogic’s core 
+ *   // iterable interface for lazy evaluation. Iterable could just as easily 
+ *   // have wrapped an Array or a Generator without downstream changes.  
  *   unpath('/bt:bug-holder', ns) // Naïve implementation of xdmp:unpath()
  * )
- *   .slice(0, 10)   // delegates to fn.subsequence when possible
- *   .xpath('//bt:bug-number', ns)   // may yield more than once per document
- *   .map(node => parseInt(node.textContent, 10)) // Lazy using a generator. (Yes, I could have done this in the XPath above.)
- *   .sort((a, b) => a - b) // Eagerly instantiates an array. That's OK because of the slice above.
+ *   // Get the first 10. Delegates to fn.subsequence when possible.
+ *   .slice(0, 10)   
+ *   // For each, yeild matching nodes based on the XPath
+ *   .xpath('//bt:bug-number', ns)   
+ *   // Cast each item as a decimal number. 
+ *   // (Yes, I could have done this in the XPath above.)
+ *   // Uses a generator where possible to maintain lazy evaluation.
+ *   .map(node => parseInt(node.textContent, 10))
+ *   // Sort the values. Eagerly instantiates an array. That's OK because 
+ *   // the slice above is finite and small. 
+ *   .sort((a, b) => a - b)
+ *   // Cast/project as another iterable type, lazily where possible. 
  *   .toSequence(); // Lazy if the wrapper iterable is (and Sequence.from() is)
+ *   // or .toArray()
+ *   // or for…of becuase Iterable is iterable (Zing!)
+ *   
  * 
  * @module iterable.js
  * @exports Iterable  
@@ -91,6 +109,7 @@ Object.assign(Iterable, {
    * Loop over an iterable, executing a function on each item, yielding 
    * an iterable.
    * 
+   * @private
    * @memberof Iterable
    * 
    * @param {iterable} iterable d
@@ -110,6 +129,7 @@ Object.assign(Iterable, {
    * Same as `Iterable.prototype.map` but delegates to the called generator, 
    * i.e. `yield*` instead of `yield`.
    * 
+   * @private
    * @memberof Iterable
    * 
    * @param {iterable} iterable
@@ -125,7 +145,7 @@ Object.assign(Iterable, {
   },
   /**
    * 
-   * 
+   * @private
    * @memberof Iterable
    * 
    * @param {Iterable} iterable
@@ -144,6 +164,7 @@ Object.assign(Iterable, {
   /**
    * Yeilds a portion of an iterable between two offsets.
    * 
+   * @private
    * @memberof Iterable
    * 
    * @param {iterable.<*>} iterable - Any iterable
@@ -179,10 +200,11 @@ Object.assign(Iterable, {
   },
   /**
    * 
+   * @private
    * @memberof Iterable
    * 
-   * @param {*} iterable
-   * @param {*} predicate
+   * @param {iterable.<*>} iterable
+   * @param {function} predicate
    * @param {*} that
    */
   filter: function*(iterable, predicate, that) {
@@ -197,6 +219,7 @@ Object.assign(Iterable, {
   },
   /**
    * 
+   * @private
    * @memberof Iterable
    * 
    * @param {*} iterable
@@ -214,20 +237,24 @@ Object.assign(Iterable, {
 
 Object.assign(Iterable.prototype, {
   /**
+   * Gets the iterator associated with the underlying concrete iterable.
+   * 
    * @name Symbol.iterator
    * @memberof Iterable
    * @instance
-   * @returns {*} Yields to the wrapped iterable
+   * @returns {*} Yields from the wrapped iterable
    */
   [Symbol.iterator]: function*() { yield* this._iterable; },
   /**
+   * Applys a function to each item of the current iterable and returns a new iterable. 
+   * 
    * 
    * @memberof Iterable
    * @instance
    * 
-   * @param {function} fct
-   * @param {*} that
-   * @returns
+   * @param {function} fct - The function to apply
+   * @param {*} that - What `this` should mean when calling `fct` (i.e. the first parameter of `Function.prototype.call`) 
+   * @returns {Iterable<*>} 
    */
   map: function(fct, that) {
     if(Array.isArray(this._iterable)) {
@@ -238,12 +265,13 @@ Object.assign(Iterable.prototype, {
     return this;
   },
   /**
+   * Calculate an aggregate value over all of an `Iterable` instance’s items. 
    * 
    * @memberof Iterable
    * @instance
    * 
-   * @param {*} fct
-   * @param {*} init
+   * @param {function} fct - The function that takes the previous value and the current item and returns a new value for the next iteration.
+   * @param {*} init - The initial value
    * @returns
    */
   reduce: function(fct, init) {
@@ -254,13 +282,14 @@ Object.assign(Iterable.prototype, {
     }
   },
   /**
+   * Get a subsection of an {@link Iterable} as an {@link Iterable}. Delegates to the underlying concrete implementation where possible. Maintains lazy evaluation, where possible. For example, `slice` on MarkLogic `Sequence` will use the lazy <code>{@link https://docs.marklogic.com/fn.subsequence fn.subsequence}</code> while wrapped `Array` instances will default to `Array.prototype.slice`. 
    * 
    * @memberof Iterable
    * @instance
    * 
-   * @param {*} begin
-   * @param {*} end
-   * @returns
+   * @param {number} begin - The zero-based index where to start
+   * @param {number} [end] - The zero-based index before which to stop. Defaults to the rest of the iterable.  
+   * @returns {Iterable<*>}
    */
   slice: function(begin, end) {
     if(Array.isArray(this._iterable)) {
@@ -277,9 +306,9 @@ Object.assign(Iterable.prototype, {
    * @memberof Iterable
    * @instance
    * 
-   * @param {*} predicate
-   * @param {*} that
-   * @returns
+   * @param {function} predicate
+   * @param {*} [that]
+   * @returns {Iterable<*>}
    */
   filter: function(predicate, that) {
     if(Array.isArray(this._iterable)) {
