@@ -142,13 +142,17 @@ Object.assign(Iterable, {
     return value;
   },
   /**
+   * Yeilds a portion of an iterable between two offsets.
    * 
    * @memberof Iterable
    * 
-   * @param {*} iterable
-   * @param {*} begin
-   * @param {*} end
-   * @returns
+   * @param {iterable.<*>} iterable - Any iterable
+   * @param {number} begin - The starting offset (zero-based)
+   * @param {[number]} end - The offset before which to stop (*not* the length) or the rest if omitted
+   * @returns {iterable.<*>} - Yields an iterable
+   * 
+   * @example
+   * Iterable([1, 2, 3, 4]).slice(1, 3); // [2, 3] 
    */
   slice: function*(iterable, begin, end) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
