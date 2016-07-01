@@ -12,13 +12,55 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   *
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * /
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
  
 'use strict';
 
 /* Inspired by <http://www.benmvp.com/learning-es6-generators-as-iterators/> */
+
+/**
+ * Wraps any iterable (i.e. an object that has a `Symbol.iterator` property) to provide a common iterface, regardless of the underlying concrete type. Thus, you can call the same <code>{@link Iterable#map}</code> on an `Array`, a MarkLogic `Seqeunce`, or a generator. Where possible, `Iterable` delegates to the underlying implementation. For example, <code>{@link Iterable#slice}</code> uses <code>fn.subsequence</code> when it’s slicing a MarkLogic `Sequence`, `Array.prototype.slice` when it‘s operating on an `Array`, and steps the iterator for a generator. 
+ * 
+ * @example
+ * Iterable(
+ *   cts.collections()
+ * )
+ *   .filter(c => true) // Not very discriminating
+ *   .map(c => { return { name: c, count: cts.frequency(c) }})
+ *   .sort((a, b) => b.count - a.count)
+ *   .reduce((prev, item) => prev + '\r' + item.count + ': ' + item.name, '');
+ * 
+ * @example
+ * const ns = {bt: 'http://cerisent.com/bugtrack' };
+ * Iterable( // Wraps any iterable
+ *   unpath('/bt:bug-holder', ns) // Naïve implementation of xdmp:unpath()
+ * )
+ *   .slice(0, 10)   // delegates to fn.subsequence when possible
+ *   .xpath('//bt:bug-number', ns)   // may yield more than once per document
+ *   .map(node => parseInt(node.textContent, 10)) // Lazy using a generator. (Yes, I could have done this in the XPath above.)
+ *   .sort((a, b) => a - b) // Eagerly instantiates an array. That's OK because of the slice above.
+ *   .toSequence(); // Lazy if the wrapper iterable is (and Sequence.from() is)
+ * 
+ * @module iterable.js
+ * @exports Iterable  
+ */
+
+/**
+ * Factory that constructs an `Iterable` instance from an *iterable*.  
+ * 
+ * @constructs Iterable
+ * @param {Array|Sequence|iterable.<*>} iterable Any iterable (i.e. something that has a `Symbol.iterator` property)
+ * @returns {Iterable} - An new `Iterable` instance the wraps the passed in iterable
+ */
 function Iterable(iterable) {
   if(!this) { return new Iterable(iterable); } // Call as a factory, not a constructor
+  /** 
+   * @memberof Iterable
+   * @instance
+   * @property {iterable.<*>} _iterable - The wrapped iterable
+   * @name _iterable
+   * @protected 
+   */
   Object.defineProperty(this, '_iterable', {
     enumerable: false,
     configurable: false,
@@ -33,10 +75,11 @@ Object.assign(Iterable, {
    * Whether an object is iterable. Only checks for `Symbol.iterator`. This
    * won’t catch the case where a function implicitly returns a duck-typed
    * iterator. Note that strings are iterable by defintion in the language spec.
-   *
-   * @param {object} obj              Any object, including `null` or `undefined`
-   * @param {[boolean]} ignoreStrings Don’t consider a string iterable. 
-   *                                  Be careful how you employ this.
+   * 
+   * @memberof Iterable
+   * 
+   * @param {*} obj - Any object, including `null` or `undefined`
+   * @param {[boolean]} ignoreStrings - Don’t consider a string iterable. Be careful how you employ this.
    * @return {boolean} Whether the object is iterable
    */
   isIterable: function(obj, ignoreStrings) {
@@ -45,12 +88,16 @@ Object.assign(Iterable, {
     return Boolean(obj[Symbol.iterator]);
   },
   /**
-   * Loop over an iterable, executing a function on each item, yielding an iterable.
-   *
+   * Loop over an iterable, executing a function on each item, yielding 
+   * an iterable.
+   * 
+   * @memberof Iterable
+   * 
    * @param {iterable} iterable d
-   * @param {function} fct      A function 
-   * @param {[object]} that     The optional `this` object to which `fct` is bound. 
-   *                            Defaults to `null`.
+   * @param {function} fct - A mapper function 
+   * @param {[object]} that - The optional `this` object to which `fct` is bound. Defaults to `null`.
+   * @returns {iterable.<*>} Yields mapped items
+   * @throws {TypeError}
    */
   map: function*(iterable, fct, that) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
@@ -60,8 +107,10 @@ Object.assign(Iterable, {
     }
   },
   /**
-   * Same as `Iterable.prototype.map` but delegates to the called generator, i.e. `yield*` 
-   * instead of `yield`.
+   * Same as `Iterable.prototype.map` but delegates to the called generator, 
+   * i.e. `yield*` instead of `yield`.
+   * 
+   * @memberof Iterable
    * 
    * @param {iterable} iterable
    * @param {GeneratorFunction} gen
@@ -74,6 +123,16 @@ Object.assign(Iterable, {
       yield* gen.call(that || null, item);
     }
   },
+  /**
+   * 
+   * 
+   * @memberof Iterable
+   * 
+   * @param {Iterable} iterable
+   * @param {function} fct - 
+   * @param {*} init        
+   * @returns 
+   */
   reduce: function(iterable, fct, init) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
     let value = init, index = 0;
@@ -82,6 +141,15 @@ Object.assign(Iterable, {
     }
     return value;
   },
+  /**
+   * 
+   * @memberof Iterable
+   * 
+   * @param {*} iterable
+   * @param {*} begin
+   * @param {*} end
+   * @returns
+   */
   slice: function*(iterable, begin, end) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
     if('undefined' === typeof begin) { yield* iterable; return;}
@@ -93,6 +161,8 @@ Object.assign(Iterable, {
       } else {
         yield* fn.subsequence(iterable, begin);
       }
+    } else if(Array.isArray(iterable)) {
+      yield* iterable.slice(begin, end);
     } else {
       let index = 0;
       for(let value of iterable) {
@@ -103,6 +173,14 @@ Object.assign(Iterable, {
       }
     }
   },
+  /**
+   * 
+   * @memberof Iterable
+   * 
+   * @param {*} iterable
+   * @param {*} predicate
+   * @param {*} that
+   */
   filter: function*(iterable, predicate, that) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
     if('function' !== typeof predicate) { throw new TypeError('predicate must be a function'); }
@@ -113,6 +191,14 @@ Object.assign(Iterable, {
       }
     }
   },
+  /**
+   * 
+   * @memberof Iterable
+   * 
+   * @param {*} iterable
+   * @param {*} fct
+   * @param {*} that
+   */
   forEach: function*(iterable, fct, that) {
     if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
     if('function' !== typeof fct) { throw new TypeError('predicate must be a function'); }
@@ -123,7 +209,22 @@ Object.assign(Iterable, {
 });
 
 Object.assign(Iterable.prototype, {
+  /**
+   * @name Symbol.iterator
+   * @memberof Iterable
+   * @instance
+   * @returns {*} Yields to the wrapped iterable
+   */
   [Symbol.iterator]: function*() { yield* this._iterable; },
+  /**
+   * 
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {function} fct
+   * @param {*} that
+   * @returns
+   */
   map: function(fct, that) {
     if(Array.isArray(this._iterable)) {
       this._iterable = this._iterable.map(fct, that);
@@ -132,7 +233,15 @@ Object.assign(Iterable.prototype, {
     }
     return this;
   },
-  // TODO: What if the reducer returns an iterable?
+  /**
+   * 
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {*} fct
+   * @param {*} init
+   * @returns
+   */
   reduce: function(fct, init) {
     if(Array.isArray(this._iterable)) {
       return this._iterable.reduce(fct, init);
@@ -140,6 +249,15 @@ Object.assign(Iterable.prototype, {
       return Iterable.reduce(this, fct, init);
     }
   },
+  /**
+   * 
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {*} begin
+   * @param {*} end
+   * @returns
+   */
   slice: function(begin, end) {
     if(Array.isArray(this._iterable)) {
       this._iterable = this._iterable.slice(begin, end);
@@ -150,8 +268,14 @@ Object.assign(Iterable.prototype, {
   },
   /**
    * `filter` is almost always better implemented as an upstream query when 
-   * you’re working with data from a database.
-   *
+   * you’re working with data from a database. 
+   * 
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {*} predicate
+   * @param {*} that
+   * @returns
    */
   filter: function(predicate, that) {
     if(Array.isArray(this._iterable)) {
@@ -161,6 +285,14 @@ Object.assign(Iterable.prototype, {
     }
     return this;
   },
+  /**
+   * 
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {*} comparator
+   * @returns
+   */
   sort: function(comparator) {
     // DON'T USE THIS ON ANYTHING LARGE
     this._iterable = Array.from(this._iterable).sort(comparator);
@@ -192,8 +324,17 @@ Object.assign(Iterable.prototype, {
   }
 });
 
-/** MarkLogic-specific **/
+/* MarkLogic-specific */
 Object.assign(Iterable.prototype, {
+  /**
+   * @memberof Iterable
+   * @instance
+   * 
+   * @param {*} path
+   * @param {*} bindings
+   * @param {*} that
+   * @returns
+   */
   xpath: function(path, bindings, that) {
     if(null === path || 'undefined' === typeof path) { throw new TypeError('path must be a string of XPath'); }
     this._iterable = Iterable.delegate(
