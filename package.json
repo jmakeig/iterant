@@ -1,0 +1,25 @@
+{
+  "name": "iterable",
+  "version": "0.0.1",
+  "description": "An iterable wrapper for MarkLogic Server-Side JavaScript",
+  "main": "iterable.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "documentation build --format html --output docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmakeig/iterable.git"
+  },
+  "keywords": [
+    "marklogic",
+    "iterable",
+    "javascript"
+  ],
+  "author": "Justin Makeig <jmpublic+github@makeig.com> (https://www.github.com/jmakeig)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jmakeig/iterable/issues"
+  },
+  "homepage": "https://github.com/jmakeig/iterable#readme"
+}
