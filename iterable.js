@@ -166,6 +166,16 @@ Object.assign(Iterable.prototype, {
     this._iterable = Array.from(this._iterable).sort(comparator);
     return this;
   },
+  // TODO: Does this need to be backed by a Generator? Sequence is already lazy 
+  //       (assuming `new Sequence()` is lazy).
+  concat: function(...args) {
+    if(this._iterable instanceof Sequence) {
+      this._iterable = new Sequence(...args);
+    } else if(Array.isArray(this._iterable)) {
+      this._iterable.concat(...args);
+    }
+    return this;
+  },
   forEach: function(fct, that) {
    if(Array.isArray(this._iterable)) {
       this._iterable = this._iterable.filter(predicate, that);
