@@ -19,7 +19,14 @@
 /* Inspired by <http://www.benmvp.com/learning-es6-generators-as-iterators/> */
 
 /**
- * Wraps any iterable (i.e. an object that has a `Symbol.iterator` property) to provide a common iterface, regardless of the underlying concrete type. Thus, you can call the same <code>{@link Iterable#map}</code> on an `Array`, a MarkLogic `Seqeunce`, or a generator. Where possible, `Iterable` delegates to the underlying implementation. For example, <code>{@link Iterable#slice}</code> uses <code>fn.subsequence</code> when it’s slicing a MarkLogic `Sequence`, `Array.prototype.slice` when it‘s operating on an `Array`, and steps the iterator for a generator. 
+ * Wraps any iterable (i.e. an object that has a `Symbol.iterator` property) to
+ * provide a common iterface, regardless of the underlying concrete type. Thus,
+ * you can call the same <code>{@link Iterable#map}</code> on an `Array`, a
+ * MarkLogic `Seqeunce`, or a generator. Where possible, `Iterable` delegates to
+ * the underlying implementation. For example, <code>{@link
+ * Iterable#slice}</code> uses <code>fn.subsequence</code> when it’s slicing a
+ * MarkLogic `Sequence`, `Array.prototype.slice` when it‘s operating on an
+ * `Array`, and steps the iterator for a generator.
  * 
  * @example
  * Iterable(
@@ -57,27 +64,30 @@
  *   .toSequence(); // Lazy if the wrapper iterable is (and Sequence.from() is)
  *   // or .toArray()
  *   // or for…of becuase Iterable is iterable (Zing!)
- *   
  * 
- * @module iterable.js
- * @exports Iterable  
+ * @module 
+ * @exports Iterable
  */
 
 /**
- * Factory that constructs an `Iterable` instance from an *iterable*.  
+ * Factory that constructs an `Iterable` instance from an *iterable*.
  * 
  * @constructs Iterable
- * @param {Array|Sequence|iterable.<*>} iterable Any iterable (i.e. something that has a `Symbol.iterator` property)
- * @returns {Iterable} - An new `Iterable` instance the wraps the passed in iterable
+ * @function
+ * @param {Array|Sequence|iterable.<*>} iterable Any iterable (i.e. something 
+ * that has a `Symbol.iterator` property)
+ * @returns {Iterable} - An new `Iterable` instance the wraps the passed in 
+ * iterable
  */
 function Iterable(iterable) {
-  if(!this) { return new Iterable(iterable); } // Call as a factory, not a constructor
+  if(!this) { return new Iterable(iterable); } // Call as a factory, 
+                                               // not a constructor
   /** 
    * @memberof Iterable
    * @instance
    * @property {iterable.<*>} _iterable - The wrapped iterable
    * @name _iterable
-   * @protected 
+   * @private 
    */
   Object.defineProperty(this, '_iterable', {
     enumerable: false,
