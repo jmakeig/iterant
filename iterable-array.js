@@ -29,6 +29,7 @@ function IterableArray(array) {
 
 IterableArray.prototype = Object.assign(
   Object.create(Iterable.prototype), {
+    [Symbol.toStringTag]: 'IterableArray',
     slice(begin, end) { 
       return IterableArray(this._iterable.slice(begin, end));
     },

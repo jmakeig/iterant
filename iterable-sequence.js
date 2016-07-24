@@ -30,6 +30,7 @@ function IterableSequence(sequence) {
 
 IterableSequence.prototype = Object.assign(
   Object.create(Iterable.prototype), {
+    [Symbol.toStringTag]: 'IterableSequence',
     slice(begin, end) { 
       let seq;
       if(end) {

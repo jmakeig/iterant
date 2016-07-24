@@ -254,6 +254,7 @@ Object.assign(Iterable.prototype, {
    * @returns {*} Yields from the wrapped iterable
    */
   [Symbol.iterator]: function*() { yield* this._iterable; },
+  [Symbol.toStringTag]: 'Iterable',
   /**
    * Applys a function to each item of the current iterable and returns a new iterable. 
    * 
