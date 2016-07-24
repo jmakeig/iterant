@@ -44,8 +44,12 @@ IterableSequence.prototype = Object.assign(
     //reduce(reducer, init) { },
     //filter(predicate, that) { },
     concat(...args) {
+      const out = [this._iterable];
+      for(let arg of args) {
+        out.push(Sequence.from(arg));
+      }
       return IterableSequence(
-        new Sequence(...args)
+        new Sequence(...out)
       );
     },
     //sort(comparator) { },
