@@ -16,6 +16,7 @@
  
  'use strict';
 
+module.exports = IterableSequence;
 const Iterable = require('./iterable');
 
 function IterableSequence(sequence) {
@@ -66,5 +67,3 @@ IterableSequence.prototype = Object.assign(
       );
     }
 });
-
-module.exports = IterableSequence;

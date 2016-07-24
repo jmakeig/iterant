@@ -16,6 +16,7 @@
  
  'use strict';
 
+module.exports = IterableArray;
 const Iterable = require('./iterable');
 
 function IterableArray(array) {
@@ -47,5 +48,3 @@ IterableArray.prototype = Object.assign(
       return IterableArray(this._iterable.sort(comparator));
     },
 });
-
-module.exports = IterableArray;

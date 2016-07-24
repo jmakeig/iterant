@@ -16,7 +16,9 @@
  
 'use strict';
 
-//const IterableArray = require('./iterable-array.js');
+module.exports = Iterable;
+// Watch out: Circular dependency. The export needs to happen before the require
+const IterableArray = require('./iterable-array.js');
 
 /* Inspired by <http://www.benmvp.com/learning-es6-generators-as-iterators/> */
 
@@ -332,4 +334,3 @@ Object.assign(Iterable.prototype, {
   },
 });
 
-module.exports = Iterable;
