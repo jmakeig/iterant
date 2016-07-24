@@ -234,6 +234,12 @@ Object.assign(Iterable, {
       }
     }
   },
+  concat: function*(iterable, ...args) {
+    yield* iterable;
+    for(let arg of args) {
+      yield* arg;
+    }
+  }
 });
 
 Object.assign(Iterable.prototype, {
@@ -308,8 +314,10 @@ Object.assign(Iterable.prototype, {
   },
   // TODO: Does this need to be backed by a Generator? Sequence is already lazy 
   //       (assuming `new Sequence()` is lazy).
-  concat: function(...args) {
-    throw new Error('Unimplemented');
+  concat(...args) {
+    return Iterable(
+      Iterable.concat(this._iterable, ...args)
+    );
   },
   sort(comparator) {
     if('function' !== typeof comparator) {
