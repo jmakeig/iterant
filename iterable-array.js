@@ -49,5 +49,3 @@ IterableArray.prototype = Object.assign(
       return IterableArray(this._iterable.sort(comparator));
     },
 });
-
-module.exports = IterableArray;
