@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * Copyright 2016 MarkLogic Corp.                                             *
  *                                                                            *
@@ -17,6 +18,10 @@
  'use strict';
 
 module.exports = IterableArray;
+=======
+'use strict';
+
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
 const Iterable = require('./iterable');
 
 function IterableArray(array) {
@@ -29,7 +34,10 @@ function IterableArray(array) {
 
 IterableArray.prototype = Object.assign(
   Object.create(Iterable.prototype), {
+<<<<<<< HEAD
     [Symbol.toStringTag]: 'IterableArray',
+=======
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
     slice(begin, end) { 
       return IterableArray(this._iterable.slice(begin, end));
     },
@@ -49,3 +57,8 @@ IterableArray.prototype = Object.assign(
       return IterableArray(this._iterable.sort(comparator));
     },
 });
+<<<<<<< HEAD
+=======
+
+module.exports = IterableArray;
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
