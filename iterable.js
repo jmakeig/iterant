@@ -93,11 +93,19 @@ function Iterable(iterable) {
    * @name _iterable
    * @private 
    */
-  Object.defineProperty(this, '_iterable', {
-    enumerable: false,
-    configurable: false,
-    writable: true,
-    value: iterable
+  Object.defineProperties(this, {
+    '_iterable': {
+      enumerable: false,
+      configurable: false,
+      writable: true,
+      value: iterable
+    },
+    'iterable': {
+      enumerable: true,
+      'get': function() {
+        return this._iterable;
+      }
+    }
   });
   return this;
 }
