@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * Copyright 2016 MarkLogic Corp.                                             *
  *                                                                            *
@@ -17,6 +18,10 @@
  'use strict';
 
 module.exports = IterableSequence;
+=======
+'use strict';
+
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
 const Iterable = require('./iterable');
 
 function IterableSequence(sequence) {
@@ -30,7 +35,10 @@ function IterableSequence(sequence) {
 
 IterableSequence.prototype = Object.assign(
   Object.create(Iterable.prototype), {
+<<<<<<< HEAD
     [Symbol.toStringTag]: 'IterableSequence',
+=======
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
     slice(begin, end) { 
       let seq;
       if(end) {
@@ -44,12 +52,17 @@ IterableSequence.prototype = Object.assign(
     //reduce(reducer, init) { },
     //filter(predicate, that) { },
     concat(...args) {
+<<<<<<< HEAD
       const out = [this._iterable];
       for(let arg of args) {
         out.push(Sequence.from(arg));
       }
       return IterableSequence(
         new Sequence(...out)
+=======
+      return IterableSequence(
+        new Sequence(...args)
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
       );
     },
     //sort(comparator) { },
@@ -72,3 +85,8 @@ IterableSequence.prototype = Object.assign(
       );
     }
 });
+<<<<<<< HEAD
+=======
+
+module.exports = IterableSequence;
+>>>>>>> Addresses #8. Refactors type-specific implementations of Iterable into their own modules.
