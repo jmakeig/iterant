@@ -29,6 +29,7 @@
     "tap-notify": "^1.0.0",
     "tape": "^4.6.0",
     "tape-catch": "^1.0.6",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "mltap": "git://github.com/jmakeig/mltap.git#develop"
   }
 }
