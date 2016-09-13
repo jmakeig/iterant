@@ -16,7 +16,7 @@
  
 'use strict';
 
-const test = require('tape');
+const test = require('/mltap/test');
 
 const Iterable = require('../iterable');
 

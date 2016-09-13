@@ -16,39 +16,33 @@
  
 'use strict';
 
-const test = require('tape');
+const test = require('/mltap/test');
 
+const IterableArray = require('../iterable-array');
 const Iterable = require('../iterable');
 
-test('Arrays are iterable', (assert) => {
-  assert.true(Iterable.isIterable([]), 'Empty array');
-  assert.true(Iterable.isIterable([], true), 'Ignore strings doesn’t matter');
-  assert.true(Iterable.isIterable([], false), 'Ignore strings doesn’t matter');
+test('Factory', (assert) => {
+  const arr = [1, 2, 3, 4, 5, 6];
+  const ia = IterableArray(arr);
+  assert.true(ia instanceof IterableArray);
+  assert.true(ia instanceof Iterable);
+  assert.equal(Object.prototype.toString.call(ia), '[object IterableArray]', 'toString');
+  assert.throws(function(){
+    IterableArray(new Map());
+  }, TypeError, 'Not an array is error');
+  assert.throws(function(){
+    IterableArray();
+  }, TypeError, 'undefined is error');
   assert.end();
 });
 
-test('Strings are iterable (unfortunately)', (assert) => {
-  assert.true(Iterable.isIterable('asdf'), 'String');
-  assert.true(Iterable.isIterable(''), 'Empty string');
-  assert.true(Iterable.isIterable('asdf', false), 'Ignore strings explicit false');
-  assert.false(Iterable.isIterable('asdf', true), 'Ignore strings');
-  assert.end();
-});
+test('IterableArray.prototype.slice', (assert) => {
+  const arr = [1, 2, 3, 4, 5, 6];
+  const ia = IterableArray(arr);
 
-test('Custom iterable', (assert) => {
-  const itr = {
-    [Symbol.iterator]: function*() {}
-  };
-  assert.true(Iterable.isIterable(itr), 'Custom object')
-  assert.end();
-});
-
-test('Non-iterables', (assert) => {
-  assert.false(Iterable.isIterable(null), 'null');
-  assert.false(Iterable.isIterable(undefined), 'undefined');
-  assert.false(Iterable.isIterable(NaN), 'NaN');
-  assert.false(Iterable.isIterable(44.3), 'number');
-  assert.false(Iterable.isIterable(true), 'boolean');
-  assert.false(Iterable.isIterable(new Error()), 'Error');
+  assert.true(ia.slice(0,1) instanceof IterableArray, 'slice returns IterableArray');
+  assert.notEqual(ia.slice(0, 1), ia, 'slice is immutable');
+  assert.deepEqual(Array.from(ia.slice(1, 4)), arr.slice(1, 4), 'slice is the same as Array.prototype.slice');
+  assert.deepEqual(Array.from(ia.slice(-2)), arr.slice(-2), 'slice is the same as Array.prototype.slice');
   assert.end();
 });
