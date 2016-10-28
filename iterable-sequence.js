@@ -28,15 +28,25 @@ function IterableSequence(sequence) {
 }
 
 // Inherit from Iterable
-IterableArray.prototype = Object.create(Iterable.prototype); 
+IterableSequence.prototype = Object.create(Iterable.prototype); 
 
-IterableSequence.prototype[Symbol.toStringTag]: 'IterableSequence';
+IterableSequence.prototype[Symbol.toStringTag] = 'IterableSequence';
+IterableSequence.prototype[Symbol.species] = IterableSequence;
 IterableSequence.prototype.slice = function(begin, end) { 
   let seq;
+  if(undefined === begin) {
+    return IterableSequence(this._iterable);
+  }
+  if('number' !== typeof begin || begin < 0 || 0 !== begin % 1) { 
+    throw new TypeError('begin must be a positive integer'); 
+  }
   if(end) {
+    if('number' !== typeof end || end < 0 || 0 !== end % 1 || end < begin) { 
+      throw new TypeError('end must be a positive integer greater than begin (' + String(begin) + ')'); 
+    }
     seq = fn.subsequence(this._iterable, begin + 1, end - begin);
   } else {
-    seq = fn.subsequence(this._iterable, begin);
+    seq = fn.subsequence(this._iterable, begin + 1);
   }
   return IterableSequence(seq);
 };
@@ -44,15 +54,19 @@ IterableSequence.prototype.slice = function(begin, end) {
 //reduce(reducer, init) { },
 //filter(predicate, that) { },
 IterableSequence.prototype.concat = function(...args) {
-  const out = [this._iterable];
-  for(let arg of args) {
-    out.push(Sequence.from(arg));
+  if(0 === args.length) {
+    return IterableSequence(this._iterable);
   }
   return IterableSequence(
-    new Sequence(...out)
+    new Sequence(this._iterable, Sequence.from(...args))
   );
 };
-//sort(comparator) { };
+IterableSequence.prototype.sort = function(comparator) { 
+  if(console && 'function' === typeof console.warn) {
+    console.warn('Sort in the database query where possible. This won’t scale for large Sequences.');
+  }
+  return Iterable.prototype.sort.call(this, comparator);
+};
 // FIXME: This doesn't depend on Sequence. Might want to do XPath on any type of iterable, no?
 IterableSequence.prototype.xpath = function(path, bindings, that) {
   if(null === path || 'undefined' === typeof path) { 
