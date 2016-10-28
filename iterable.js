@@ -261,6 +261,7 @@ Object.assign(Iterable.prototype, {
    */
   [Symbol.iterator]: function*() { yield* this._iterable; },
   [Symbol.toStringTag]: 'Iterable',
+  [Symbol.species]: Iterable,
   /**
    * Applys a function to each item of the current iterable and returns a new iterable. 
    * 
@@ -329,12 +330,15 @@ Object.assign(Iterable.prototype, {
     );
   },
   sort(comparator) {
-    if('function' !== typeof comparator) {
+    if(undefined !== comparator && 'function' !== typeof comparator) {
       throw new TypeError('comparator must be a function');
     }
     return IterableArray(
       Array.from(this).sort(comparator)
     );
+  },
+  clone() {
+    return this[Symbol.species](this._iterator);
   },
   toArray: function() {
     return Array.from(this);
