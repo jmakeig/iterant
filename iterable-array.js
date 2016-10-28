@@ -26,26 +26,25 @@ function IterableArray(array) {
   if(!this) { return new IterableArray(array); }
   return Iterable.call(this, array); 
 }
+// Inherit from Iterable
+IterableArray.prototype = Object.create(Iterable.prototype);
 
-IterableArray.prototype = Object.assign(
-  Object.create(Iterable.prototype), {
-    [Symbol.toStringTag]: 'IterableArray',
-    slice(begin, end) { 
-      return IterableArray(this._iterable.slice(begin, end));
-    },
-    map(mapper, that) {
-      return IterableArray(this._iterable.map(mapper, that));
-    },
-    reduce(reducer, init) {
-      return this._iterable.reduce(reducer, init);
-    },
-    filter(predicate, that) {
-      return IterableArray(this._iterable.filter(predicate, that));
-    },
-    concat(...args) {
-      return IterableArray(this._iterable.concat(...args));
-    },
-    sort(comparator) {
-      return IterableArray(this._iterable.sort(comparator));
-    },
-});
+IterableArray.prototype[Symbol.toStringTag] = 'IterableArray';
+IterableArray.prototype.slice = function(begin, end) { 
+  return IterableArray(this._iterable.slice(begin, end));
+};
+IterableArray.prototype.map = function(mapper, that) {
+  return IterableArray(this._iterable.map(mapper, that));
+};
+IterableArray.prototype.reduce = function(reducer, init) {
+  return this._iterable.reduce(reducer, init);
+};
+IterableArray.prototype.filter = function(predicate, that) {
+  return IterableArray(this._iterable.filter(predicate, that));
+};
+IterableArray.prototype.concat = function(...args) {
+  return IterableArray(this._iterable.concat(...args));
+};
+IterableArray.prototype.sort = function(comparator) {
+  return IterableArray(this._iterable.sort(comparator));
+};

@@ -26,49 +26,48 @@ function IterableSequence(sequence) {
   if(!this) { return new IterableSequence(sequence); }
   return Iterable.call(this, sequence); 
 }
-//IterableSequence[Symbol.species] = () => 
 
-IterableSequence.prototype = Object.assign(
-  Object.create(Iterable.prototype), {
-    [Symbol.toStringTag]: 'IterableSequence',
-    slice(begin, end) { 
-      let seq;
-      if(end) {
-        seq = fn.subsequence(this._iterable, begin + 1, end - begin);
-      } else {
-        seq = fn.subsequence(this._iterable, begin);
+// Inherit from Iterable
+IterableArray.prototype = Object.create(Iterable.prototype); 
+
+IterableSequence.prototype[Symbol.toStringTag]: 'IterableSequence';
+IterableSequence.prototype.slice = function(begin, end) { 
+  let seq;
+  if(end) {
+    seq = fn.subsequence(this._iterable, begin + 1, end - begin);
+  } else {
+    seq = fn.subsequence(this._iterable, begin);
+  }
+  return IterableSequence(seq);
+};
+//map(mapper, that) { },
+//reduce(reducer, init) { },
+//filter(predicate, that) { },
+IterableSequence.prototype.concat = function(...args) {
+  const out = [this._iterable];
+  for(let arg of args) {
+    out.push(Sequence.from(arg));
+  }
+  return IterableSequence(
+    new Sequence(...out)
+  );
+};
+//sort(comparator) { };
+// FIXME: This doesn't depend on Sequence. Might want to do XPath on any type of iterable, no?
+IterableSequence.prototype.xpath = function(path, bindings, that) {
+  if(null === path || 'undefined' === typeof path) { 
+    throw new TypeError('path must be a string of XPath'); 
+  }
+  return Iterable(
+    Iterable.delegate(
+      this._iterable, 
+      function*(item){
+        if(item instanceof Node 
+          || item instanceof Document 
+          || 'function' === typeof item.xpath) {
+          yield* item.xpath(path, bindings);
+        }
       }
-      return IterableSequence(seq);
-    },
-    //map(mapper, that) { },
-    //reduce(reducer, init) { },
-    //filter(predicate, that) { },
-    concat(...args) {
-      const out = [this._iterable];
-      for(let arg of args) {
-        out.push(Sequence.from(arg));
-      }
-      return IterableSequence(
-        new Sequence(...out)
-      );
-    },
-    //sort(comparator) { },
-    // FIXME: This doesn't depend on Sequence. Might want to do XPath on any type of iterable, no?
-    xpath(path, bindings, that) {
-      if(null === path || 'undefined' === typeof path) { 
-        throw new TypeError('path must be a string of XPath'); 
-      }
-      return Iterable(
-        Iterable.delegate(
-          this._iterable, 
-          function*(item){
-            if(item instanceof Node 
-              || item instanceof Document 
-              || 'function' === typeof item.xpath) {
-              yield* item.xpath(path, bindings);
-            }
-          }
-        )
-      );
-    }
-});
+    )
+  );
+};
