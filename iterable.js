@@ -110,147 +110,145 @@ function Iterable(iterable) {
   return this;
 }
 
-Object.assign(Iterable, {
-  /**
-   * Whether an object is iterable. Only checks for `Symbol.iterator`. This
-   * won’t catch the case where a function implicitly returns a duck-typed
-   * iterator. Note that strings are iterable by defintion in the language spec.
-   * 
-   * @memberof Iterable
-   * 
-   * @param {*} obj - Any object, including `null` or `undefined`
-   * @param {[boolean]} ignoreStrings - Don’t consider a string iterable. Be careful how you employ this.
-   * @return {boolean} Whether the object is iterable
-   */
-  isIterable: function(obj, ignoreStrings) {
-    if(null === obj || 'undefined' === typeof obj) return false;
-    if('string' === typeof obj && true === ignoreStrings) return false;
-    return Boolean(obj[Symbol.iterator]);
-  },
-  /**
-   * Loop over an iterable, executing a function on each item, yielding 
-   * an iterable.
-   * 
-   * @private
-   * @memberof Iterable
-   * 
-   * @param {iterable} iterable d
-   * @param {function} fct - A mapper function 
-   * @param {[object]} that - The optional `this` object to which `fct` is bound. Defaults to `null`.
-   * @returns {iterable.<*>} Yields mapped items
-   * @throws {TypeError}
-   */
-  map: function*(iterable, fct, that) {
-    if(!Iterable.isIterable(iterable)) { 
-      throw new TypeError('iterable must be iterable'); 
+/**
+ * Whether an object is iterable. Only checks for `Symbol.iterator`. This
+ * won’t catch the case where a function implicitly returns a duck-typed
+ * iterator. Note that strings are iterable by defintion in the language spec.
+ * 
+ * @memberof Iterable
+ * 
+ * @param {*} obj - Any object, including `null` or `undefined`
+ * @param {[boolean]} ignoreStrings - Don’t consider a string iterable. Be careful how you employ this.
+ * @return {boolean} Whether the object is iterable
+ */
+Iterable.isIterable = function(obj, ignoreStrings) {
+  if(null === obj || 'undefined' === typeof obj) return false;
+  if('string' === typeof obj && true === ignoreStrings) return false;
+  return Boolean(obj[Symbol.iterator]);
+};
+/**
+ * Loop over an iterable, executing a function on each item, yielding 
+ * an iterable.
+ * 
+ * @private
+ * @memberof Iterable
+ * 
+ * @param {iterable} iterable d
+ * @param {function} fct - A mapper function 
+ * @param {[object]} that - The optional `this` object to which `fct` is bound. Defaults to `null`.
+ * @returns {iterable.<*>} Yields mapped items
+ * @throws {TypeError}
+ */
+Iterable.map = function*(iterable, fct, that) {
+  if(!Iterable.isIterable(iterable)) { 
+    throw new TypeError('iterable must be iterable'); 
+  }
+  if('function' !== typeof fct) { 
+    throw new TypeError('fct must be a function'); 
+  }
+  for(let item of iterable) {
+    yield fct.call(that || null, item);
+  }
+};
+/**
+ * Same as `Iterable.prototype.map` but delegates to the called generator, 
+ * i.e. `yield*` instead of `yield`.
+ * 
+ * @private
+ * @memberof Iterable
+ * 
+ * @param {iterable} iterable
+ * @param {GeneratorFunction} gen
+ * @param {[object]} that
+ */
+Iterable.delegate = function*(iterable, gen, that) {
+  if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
+  if('function' !== typeof gen) { throw new TypeError('gen must be a generator function'); }
+  for(let item of iterable) {
+    yield* gen.call(that || null, item);
+  }
+};
+/**
+ * 
+ * @private
+ * @memberof Iterable
+ * 
+ * @param {Iterable} iterable
+ * @param {function} fct - 
+ * @param {*} init        
+ * @returns 
+ */
+Iterable.reduce = function(iterable, fct, init) {
+  if(!Iterable.isIterable(iterable)) { 
+    throw new TypeError('iterable must be iterable'); 
+  }
+  let value = init, index = 0;
+  for(let item of iterable) {
+    value = fct.call(null, value, item, index++, this);
+  }
+  return value;
+};
+/**
+ * Yeilds a portion of an iterable between two offsets.
+ * 
+ * @private
+ * @memberof Iterable
+ * 
+ * @param {iterable.<*>} iterable - Any iterable
+ * @param {number} begin - The starting offset (zero-based)
+ * @param {[number]} end - The offset before which to stop (*not* the length) or the rest if omitted
+ * @returns {iterable.<*>} - Yields an iterable
+ * 
+ * @example
+ * Iterable([1, 2, 3, 4]).slice(1, 3); // [2, 3] 
+ */
+Iterable.slice = function*(iterable, begin, end) {
+  if(!Iterable.isIterable(iterable)) { 
+    throw new TypeError('iterable must be iterable'); 
+  }
+  if('undefined' === typeof begin) { 
+    yield* iterable; return;
+  }
+  if('number' !== typeof begin) { 
+    throw new TypeError('begin must be a number'); 
+  }
+  let index = 0;
+  for(let value of iterable) {
+    if(index++ >= begin) {
+      yield value;  
     }
-    if('function' !== typeof fct) { 
-      throw new TypeError('fct must be a function'); 
-    }
-    for(let item of iterable) {
-      yield fct.call(that || null, item);
-    }
-  },
-  /**
-   * Same as `Iterable.prototype.map` but delegates to the called generator, 
-   * i.e. `yield*` instead of `yield`.
-   * 
-   * @private
-   * @memberof Iterable
-   * 
-   * @param {iterable} iterable
-   * @param {GeneratorFunction} gen
-   * @param {[object]} that
-   */
-  delegate: function*(iterable, gen, that) {
-    if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
-    if('function' !== typeof gen) { throw new TypeError('gen must be a generator function'); }
-    for(let item of iterable) {
-      yield* gen.call(that || null, item);
-    }
-  },
-  /**
-   * 
-   * @private
-   * @memberof Iterable
-   * 
-   * @param {Iterable} iterable
-   * @param {function} fct - 
-   * @param {*} init        
-   * @returns 
-   */
-  reduce: function(iterable, fct, init) {
-    if(!Iterable.isIterable(iterable)) { 
-      throw new TypeError('iterable must be iterable'); 
-    }
-    let value = init, index = 0;
-    for(let item of iterable) {
-      value = fct.call(null, value, item, index++, this);
-    }
-    return value;
-  },
-  /**
-   * Yeilds a portion of an iterable between two offsets.
-   * 
-   * @private
-   * @memberof Iterable
-   * 
-   * @param {iterable.<*>} iterable - Any iterable
-   * @param {number} begin - The starting offset (zero-based)
-   * @param {[number]} end - The offset before which to stop (*not* the length) or the rest if omitted
-   * @returns {iterable.<*>} - Yields an iterable
-   * 
-   * @example
-   * Iterable([1, 2, 3, 4]).slice(1, 3); // [2, 3] 
-   */
-  slice: function*(iterable, begin, end) {
-    if(!Iterable.isIterable(iterable)) { 
-      throw new TypeError('iterable must be iterable'); 
-    }
-    if('undefined' === typeof begin) { 
-      yield* iterable; return;
-    }
-    if('number' !== typeof begin) { 
-      throw new TypeError('begin must be a number'); 
-    }
-    let index = 0;
-    for(let value of iterable) {
-      if(index++ >= begin) {
-        yield value;  
-      }
-      if(index > end) { break; }
-    }
-  },
-  /**
-   * 
-   * @private
-   * @memberof Iterable
-   * 
-   * @param {iterable.<*>} iterable
-   * @param {function} predicate
-   * @param {*} that
-   */
-  filter: function*(iterable, predicate, that) {
-    if(!Iterable.isIterable(iterable)) { 
-      throw new TypeError('iterable must be iterable'); 
-    }
-    if('function' !== typeof predicate) { 
-      throw new TypeError('predicate must be a function'); 
-    }
-    let index = 0;
-    for(let item of iterable) {
-      if(predicate.call(that || null, item, index++, iterable)) {
-        yield item;
-      }
-    }
-  },
-  concat: function*(iterable, ...args) {
-    yield* iterable;
-    for(let arg of args) {
-      yield* arg;
+    if(index > end) { break; }
+  }
+};
+/**
+ * 
+ * @private
+ * @memberof Iterable
+ * 
+ * @param {iterable.<*>} iterable
+ * @param {function} predicate
+ * @param {*} that
+ */
+Iterable.filter = function*(iterable, predicate, that) {
+  if(!Iterable.isIterable(iterable)) { 
+    throw new TypeError('iterable must be iterable'); 
+  }
+  if('function' !== typeof predicate) { 
+    throw new TypeError('predicate must be a function'); 
+  }
+  let index = 0;
+  for(let item of iterable) {
+    if(predicate.call(that || null, item, index++, iterable)) {
+      yield item;
     }
   }
-});
+};
+Iterable.concat = function*(iterable, ...args) {
+  yield* iterable;
+  for(let arg of args) {
+    yield* arg;
+  }
+};
 
 Object.assign(Iterable.prototype, {
   /**
