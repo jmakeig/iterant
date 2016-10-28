@@ -1,6 +1,6 @@
 'use strict';
 
-const test = require('tape-catch');
+const test = require('tape');
 
 const IterableArray = require('../iterable-array');
 const Iterable = require('../iterable');
