@@ -33,6 +33,8 @@ test('IterableSequence factory', (assert) => {
   assert.true(iterable instanceof Iterable, 'instanceof Iterable');
   assert.equal(typeof iterable.xpath, 'function', 'xpath method is a function');
   assert.equal(Object.prototype.toString.call(iterable), '[object IterableSequence]');
+  assert.equal(iterable[Symbol.species], IterableSequence, 'species');
+  assert.equal(typeof iterable[Symbol.iterator], 'function', 'iterator');
   assert.end();
 });
 
@@ -41,6 +43,7 @@ test('IterableSequence.prototype.slice', (assert) => {
   const seq = Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']);
   const iterable = IterableSequence(seq);
   assert.notEqual(iterable.slice(), iterable, 'slice() returns a new instance');
+  assert.true(iterable.slice() instanceof IterableSequence, 'instanceof IterableSequence');
   assert.seqEqual(
     iterable.slice(), 
     IterableSequence(Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']))
@@ -83,9 +86,13 @@ test('IterableSequence.prototype.sort', (assert) => {
   assert.seqEqual(iterable.sort(), ['a', 'b', 'c', 'd', 'e', 'f'], 'default sort');
   assert.seqEqual(iterable.sort((a, b) => a < b), ['f', 'e', 'd', 'c', 'b', 'a'], 'custom comparator');
   assert.notEqual(iterable.sort(), iterable, 'returns a new instance');
+  assert.equal(Object.prototype.toString.call(iterable.sort()), '[object IterableArray]', 'explict IterableArray return');
   assert.end();
 });
 
+/**
+ * For each argument, if it's Iterable add its items, otherwise just add it
+ */
 test('IterableSequence.prototype.concat', (assert) => {
   assert.seqEqual = seqEqual;
   const seq = Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']);
