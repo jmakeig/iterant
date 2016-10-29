@@ -84,6 +84,7 @@ const IterableArray = require('./iterable-array.js');
  * iterable
  */
 function Iterable(iterable) {
+  // const Constructor = iterable[Symbol.species] || Iterable;
   if(!this) { return new Iterable(iterable); } // Call as a factory, 
                                                // not a constructor
   /** 
@@ -146,7 +147,7 @@ Iterable.map = function*(iterable, fct, that) {
   if('function' !== typeof fct) { 
     throw new TypeError('fct must be a function'); 
   }
-  for(let item of iterable) {
+  for(const item of iterable) {
     yield fct.call(that || null, item);
   }
 };
@@ -164,7 +165,7 @@ Iterable.map = function*(iterable, fct, that) {
 Iterable.delegate = function*(iterable, gen, that) {
   if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
   if('function' !== typeof gen) { throw new TypeError('gen must be a generator function'); }
-  for(let item of iterable) {
+  for(const item of iterable) {
     yield* gen.call(that || null, item);
   }
 };
@@ -183,7 +184,7 @@ Iterable.reduce = function(iterable, fct, init) {
     throw new TypeError('iterable must be iterable'); 
   }
   let value = init, index = 0;
-  for(let item of iterable) {
+  for(const item of iterable) {
     value = fct.call(null, value, item, index++, this);
   }
   return value;
@@ -213,7 +214,7 @@ Iterable.slice = function*(iterable, begin, end) {
     throw new TypeError('begin must be a number'); 
   }
   let index = 0;
-  for(let value of iterable) {
+  for(const value of iterable) {
     if(index++ >= begin) {
       yield value;  
     }
@@ -237,7 +238,7 @@ Iterable.filter = function*(iterable, predicate, that) {
     throw new TypeError('predicate must be a function'); 
   }
   let index = 0;
-  for(let item of iterable) {
+  for(const item of iterable) {
     if(predicate.call(that || null, item, index++, iterable)) {
       yield item;
     }
@@ -245,7 +246,7 @@ Iterable.filter = function*(iterable, predicate, that) {
 };
 Iterable.concat = function*(iterable, ...args) {
   yield* iterable;
-  for(let arg of args) {
+  for(const arg of args) {
     yield* arg;
   }
 };
@@ -274,7 +275,8 @@ Object.assign(Iterable.prototype, {
    * @returns {Iterable<*>} 
    */
   map: function(fct, that) {
-    return Iterable(
+    const Constructor = this._iterable[Symbol.species] || Iterable; 
+    return Constructor(
       Iterable.map(this._iterable, fct, that)
     );
   },
@@ -302,7 +304,8 @@ Object.assign(Iterable.prototype, {
    * @returns {Iterable<*>}
    */
   slice: function(begin, end) {
-    return Iterable(
+    const Constructor = this._iterable[Symbol.species] || Iterable; 
+    return Constructor(
       Iterable.slice(this._iterable, begin, end)
     );
   },
@@ -318,14 +321,16 @@ Object.assign(Iterable.prototype, {
    * @returns {Iterable<*>}
    */
   filter: function(predicate, that) {
-    return Iterable(
+    const Constructor = this._iterable[Symbol.species] || Iterable; 
+    return Constructor(
       Iterable.filter(this._iterable, predicate, that)
     );
   },
   // TODO: Does this need to be backed by a Generator? Sequence is already lazy 
   //       (assuming `new Sequence()` is lazy).
   concat(...args) {
-    return Iterable(
+    const Constructor = this._iterable[Symbol.species] || Iterable; 
+    return Constructor(
       Iterable.concat(this._iterable, ...args)
     );
   },

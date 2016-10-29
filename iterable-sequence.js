@@ -58,7 +58,7 @@ IterableSequence.prototype.concat = function(...args) {
     return IterableSequence(this._iterable);
   }
   return IterableSequence(
-    new Sequence(this._iterable, Sequence.from(...args))
+    new Sequence(this._iterable, ...args.map((item) => Sequence.from(item)))
   );
 };
 IterableSequence.prototype.sort = function(comparator) { 
