@@ -97,9 +97,13 @@ test('IterableSequence.prototype.concat', (assert) => {
   assert.seqEqual = seqEqual;
   const seq = Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']);
   const iterable = IterableSequence(seq);
+  assert.notEqual(iterable.concat(), iterable, 'returns a copy');
   assert.seqEqual(iterable.concat(['g', 'h', 'i']), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], 'flat concat');
   assert.seqEqual(iterable.concat(['g', 'h', ['i']]), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', ['i']], 'keep nested concat');
   assert.seqEqual(iterable.concat(), ['a', 'b', 'c', 'd', 'e', 'f'], 'undefined concat');
-  assert.notEqual(iterable.concat(), iterable, 'undefined concat');
+  assert.seqEqual(iterable.concat(1, new Sequence(2, 3, 4)), ['a', 'b', 'c', 'd', 'e', 'f', 1, 2, 3, 4], 'mixed iterables and non-iterables');
+  assert.seqEqual(iterable.concat(1, 2, 3, 4), ['a', 'b', 'c', 'd', 'e', 'f', 1, 2, 3, 4], 'non-iterables');
+  assert.seqEqual(iterable.concat([1, 2], new Sequence(3, 4)), ['a', 'b', 'c', 'd', 'e', 'f', 1, 2, 3, 4], 'iterables');
+  assert.notEqual(iterable.concat(), iterable, 'creates new instance');
   assert.end();
 });
