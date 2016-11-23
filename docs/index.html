@@ -1,0 +1,739 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>iterable 0.0.1 | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' type='text/css' rel='stylesheet' />
+  <link href='assets/style.css' type='text/css' rel='stylesheet' />
+  <link href='assets/github.css' type='text/css' rel='stylesheet' />
+</head>
+<body class='documentation'>
+  <div class='max-width-4 mx-auto'>
+    <div class='clearfix md-mxn2'>
+      <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>iterable</h3>
+          <div class='mb1'><code>0.0.1</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#iterable'
+                  class="">
+                  iterable
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#iterable'
+                  class=" toggle-sibling">
+                  Iterable
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#IterableisIterable'
+                        class='regular pre-open'>
+                        .isIterable
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#Iterable#Symbol.iterator'
+                        class='regular pre-open'>
+                        #Symbol.iterator
+                      </a></li>
+                      
+                      <li><a
+                        href='#Iterable#map'
+                        class='regular pre-open'>
+                        #map
+                      </a></li>
+                      
+                      <li><a
+                        href='#Iterable#reduce'
+                        class='regular pre-open'>
+                        #reduce
+                      </a></li>
+                      
+                      <li><a
+                        href='#Iterable#slice'
+                        class='regular pre-open'>
+                        #slice
+                      </a></li>
+                      
+                      <li><a
+                        href='#Iterable#filter'
+                        class='regular pre-open'>
+                        #filter
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div class='fix-margin-3'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='iterable'>
+      iterable
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Wraps any iterable (i.e. an object that has a <code>Symbol.iterator</code> property) to
+provide a common iterface, regardless of the underlying concrete type. Thus,
+you can call the same <code><a href="#iterablemap">Iterable#map</a></code> on an <code>Array</code>, a
+MarkLogic <code>Seqeunce</code>, or a generator. Where possible, <code>Iterable</code> delegates to
+the underlying implementation. For example, <code><a href="#iterableslice">Iterable#slice</a></code> uses <code>fn.subsequence</code> when it’s slicing a
+MarkLogic <code>Sequence</code>, <code>Array.prototype.slice</code> when it‘s operating on an
+<code>Array</code>, and steps the iterator for a generator.</p>
+
+
+  <div class='pre p1 fill-light mt0'>iterable</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>iterable</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>Iterable(
+  cts.collections()
+)
+  .filter(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-literal">true</span>) <span class="hljs-comment">// Not very discriminating</span>
+  .map(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> { <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: c, <span class="hljs-attr">count</span>: cts.frequency(c) }})
+  .sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b.count - a.count)
+  .reduce(<span class="hljs-function">(<span class="hljs-params">prev, item</span>) =&gt;</span> prev + <span class="hljs-string">'\r'</span> + item.count + <span class="hljs-string">': '</span> + item.name, <span class="hljs-string">''</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> ns = { <span class="hljs-attr">bt</span>: <span class="hljs-string">'http://example.com/bug-tracker'</span> };
+<span class="hljs-comment">// The first step is to wrap any iterable as an Iterable. (Capitalization </span>
+<span class="hljs-comment">// is important here.) Iterable—capital “I”—abstracts away many of the </span>
+<span class="hljs-comment">// differences between the underlying iterables.</span>
+Iterable(
+  <span class="hljs-comment">// Unpath (implementation elided for clarity) evaluates XPath against </span>
+  <span class="hljs-comment">// a MarkLogic database. It returns a Sequence, MarkLogic’s core </span>
+  <span class="hljs-comment">// iterable interface for lazy evaluation. Iterable could just as easily </span>
+  <span class="hljs-comment">// have wrapped an Array or a Generator without downstream changes.  </span>
+  unpath(<span class="hljs-string">'/bt:bug-holder'</span>, ns) <span class="hljs-comment">// Naïve implementation of xdmp:unpath()</span>
+)
+  <span class="hljs-comment">// Get the first 10. Delegates to fn.subsequence when possible.</span>
+  .slice(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>)   
+  <span class="hljs-comment">// For each, yeild matching nodes based on the XPath</span>
+  .xpath(<span class="hljs-string">'//bt:bug-number'</span>, ns)   
+  <span class="hljs-comment">// Cast each item as a decimal number. </span>
+  <span class="hljs-comment">// (Yes, I could have done this in the XPath above.)</span>
+  <span class="hljs-comment">// Uses a generator where possible to maintain lazy evaluation.</span>
+  .map(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> <span class="hljs-built_in">parseInt</span>(node.textContent, <span class="hljs-number">10</span>))
+  <span class="hljs-comment">// Sort the values. Eagerly instantiates an array. That's OK because </span>
+  <span class="hljs-comment">// the slice above is finite and small. </span>
+  .sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b)
+  <span class="hljs-comment">// Cast/project as another iterable type, lazily where possible. </span>
+  .toSequence(); <span class="hljs-comment">// Lazy if the wrapper iterable is (and Sequence.from() is)</span>
+  <span class="hljs-comment">// or .toArray()</span>
+  <span class="hljs-comment">// or for…of becuase Iterable is iterable (Zing!)</span></pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='iterable'>
+      Iterable
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Factory that constructs an <code>Iterable</code> instance from an <em>iterable</em>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>Iterable(iterable: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | Sequence | <a href="#iterable">iterable</a>&#x3C;any>)): <a href="#iterable">Iterable</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>iterable</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | Sequence | <a href="#iterable">iterable</a>&#x3C;any>))</code>
+	    Any iterable (i.e. something
+that has a 
+<code>Symbol.iterator</code>
+ property)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#iterable">Iterable</a></code>:
+        An new 
+<code>Iterable</code>
+ instance the wraps the passed in
+iterable
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='IterableisIterable'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isIterable(obj, ignoreStrings)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Whether an object is iterable. Only checks for <code>Symbol.iterator</code>. This
+won’t catch the case where a function implicitly returns a duck-typed
+iterator. Note that strings are iterable by defintion in the language spec.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isIterable(obj: any, ignoreStrings: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(any)</code>
+	    Any object, including 
+<code>null</code>
+ or 
+<code>undefined</code>
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ignoreStrings</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>])</code>
+	    Don’t consider a string iterable. Be careful how you employ this.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        Whether the object is iterable
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='Iterable#Symbol.iterator'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>Symbol.iterator</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Gets the iterator associated with the underlying concrete iterable.</p>
+
+
+  <div class='pre p1 fill-light mt0'>Symbol.iterator</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        Yields from the wrapped iterable
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Iterable#map'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>map(fct, that)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Applys a function to each item of the current iterable and returns a new iterable.</p>
+
+
+  <div class='pre p1 fill-light mt0'>map(fct: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: any): <a href="#iterable">Iterable</a>&#x3C;any></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fct</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    The function to apply
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>that</span> <code class='quiet'>(any)</code>
+	    What 
+<code>this</code>
+ should mean when calling 
+<code>fct</code>
+ (i.e. the first parameter of 
+<code>Function.prototype.call</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#iterable">Iterable</a>&#x3C;any></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Iterable#reduce'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>reduce(fct, init)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Calculate an aggregate value over all of an <code>Iterable</code> instance’s items.</p>
+
+
+  <div class='pre p1 fill-light mt0'>reduce(fct: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, init: any)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fct</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    The function that takes the previous value and the current item and returns a new value for the next iteration.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>init</span> <code class='quiet'>(any)</code>
+	    The initial value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Iterable#slice'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>slice(begin, end?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get a subsection of an <a href="#iterable">Iterable</a> as an <a href="#iterable">Iterable</a>. Delegates to the underlying concrete implementation where possible. Maintains lazy evaluation, where possible. For example, <code>slice</code> on MarkLogic <code>Sequence</code> will use the lazy <code><a href="https://docs.marklogic.com/fn.subsequence">fn.subsequence</a></code> while wrapped <code>Array</code> instances will default to <code>Array.prototype.slice</code>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterable">Iterable</a>&#x3C;any></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>begin</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The zero-based index where to start
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>end</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+	    The zero-based index before which to stop. Defaults to the rest of the iterable.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#iterable">Iterable</a>&#x3C;any></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Iterable#filter'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>filter(predicate, that?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><code>filter</code> is almost always better implemented as an upstream query when
+you’re working with data from a database.</p>
+
+
+  <div class='pre p1 fill-light mt0'>filter(predicate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: any?): <a href="#iterable">Iterable</a>&#x3C;any></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>predicate</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>that</span> <code class='quiet'>(any?)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#iterable">Iterable</a>&#x3C;any></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

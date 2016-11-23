@@ -8,7 +8,7 @@
     "test-pretty": "npm run test-node && sleep 1 && npm run test-marklogic",
     "test-marklogic": "mltap test/*.sjs | tap-notify | tap-diff",
     "test-node": "tape test/*.js | tap-notify | tap-diff",
-    "docs": "if [ -d ../iterable_gh-pages ]; then documentation build --format html --output ../iterable_gh-pages; else echo 'You need to first create a sibling iterable_gh-pages directory to track the generated documentation\n  cd ..\n  git clone git@github.com:jmakeig/iterable.git iterable_gh-pages -b gh-pages' && exit 1; fi"
+    "docs": "documentation build --format html --output docs/"
   },
   "repository": {
     "type": "git",
