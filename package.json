@@ -27,13 +27,13 @@
   "homepage": "https://jmakeig.github.io/iterable",
   "dependencies": {},
   "devDependencies": {
-    "documentation": "^4.0.0-beta5",
-    "tape": "^4.6.0",
-    "webpack": "^1.13.1",
+    "documentation": "^4.0.0-beta14",
+    "tape": "^4.6.3",
+    "webpack": "^1.13.3",
     "mltap": "git://github.com/jmakeig/mltap.git#develop"
   },
   "optionalDependencies": {
-    "faucet": "0.0.1",
+    "faucet": "^0.0.1",
     "tap-diff": "^0.1.1",
     "tap-notify": "^1.0.0"
   }
