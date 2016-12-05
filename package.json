@@ -8,7 +8,10 @@
     "test-pretty": "npm run test-node && sleep 1 && npm run test-marklogic",
     "test-marklogic": "mltap test/*.sjs | tap-notify | tap-diff",
     "test-node": "tape test/*.js | tap-notify | tap-diff",
-    "docs": "documentation build --format html --output docs/"
+    "docs": "documentation build *.js --config documentation.json --name Iterable --format html --output docs/",
+    "readme": "npm docs && documentation readme *.js --config documentation.json --section Usage --quiet",
+    "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json",
+    "jsdocs": "jsdoc -c jsdoc.json"
   },
   "repository": {
     "type": "git",
@@ -17,7 +20,8 @@
   "keywords": [
     "marklogic",
     "iterable",
-    "javascript"
+    "javascript",
+    "es2015"
   ],
   "author": "Justin Makeig <jmpublic+github@makeig.com> (https://www.github.com/jmakeig)",
   "license": "Apache-2.0",
@@ -27,10 +31,15 @@
   "homepage": "https://jmakeig.github.io/iterable",
   "dependencies": {},
   "devDependencies": {
-    "documentation": "^4.0.0-beta14",
+    "concat-stream": "^1.5.2",
+    "documentation": "^4.0.0-beta15",
+    "github-slugger": "^1.1.1",
+    "highlight.js": "^9.8.0",
+    "jsdoc": "^3.4.3",
+    "mltap": "git://github.com/jmakeig/mltap.git#develop",
     "tape": "^4.6.3",
-    "webpack": "^1.13.3",
-    "mltap": "git://github.com/jmakeig/mltap.git#develop"
+    "vinyl": "^2.0.1",
+    "vinyl-fs": "^2.4.4"
   },
   "optionalDependencies": {
     "faucet": "^0.0.1",

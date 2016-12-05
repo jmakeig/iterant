@@ -19,6 +19,23 @@
 module.exports = IterableSequence;
 const Iterable = require('./iterable');
 
+/**
+ * An {@link IterableSequence} extends {@link Iterable} with functionality 
+ * specific to MarkLogic {@link Sequence} instances.
+ * 
+ * @class IterableSequence
+ * @augments Iterable
+ * @borrows Iterable#map
+ * @borrows Iterable#reduce
+ * @borrows Iterable#filter
+ * 
+ * 
+ * @constructs IterableSequence
+ * @function
+ * @param {Sequence} sequence  - A MarkLogic {@link Sequence}
+ * @returns {IterableSequence} - A new {@link IterableSequence}
+ * @throws {TypeError} - If `seqeuence` is not a {@link Sequence}
+ */
 function IterableSequence(sequence) {
   if(!(sequence instanceof Sequence)) { 
     throw new TypeError('Can only wrap a Sequence'); 
@@ -32,6 +49,30 @@ IterableSequence.prototype = Object.create(Iterable.prototype);
 
 IterableSequence.prototype[Symbol.toStringTag] = 'IterableSequence';
 IterableSequence.prototype[Symbol.species] = IterableSequence;
+
+/**
+ * Returns a shallow copy of a portion of the {@link Iterable} into a new 
+ * {@link IterableSequence} object selected from `begin` to `end`, not including `end`. 
+ * `slice` does not modify the original {@link IterableSequence}.
+ * 
+ * The implementation delegates to {@link https://docs.marklogic.com/fn.subsequence fn.subsequence()} under the covers.
+ * 
+ * @example
+ * const seq = xdmp.databases();      // Sequence<xs.unsignedLong>
+ * const itr = IterableSequence(seq); // IterableSequence<Sequence<xs.unsignedLong>>
+ * itr
+ *  .slice(2, 4)                      // IterableSequence<xs.unsignedLong>
+ *  .map(xdmp.databaseName)           // Iterable<Generator<string>>
+ *  .toArray()                        // Array<string>
+ * 
+ * // ["Meters" , "Triggers"]
+ * 
+ * @override
+ * 
+ * @param {number} [begin] Zero-based start index. Only positive integers are supported.
+ * @param {number} [end]  Zero-based end index, not inclusive.
+ * @returns {IterableSequence} A shallow copy of the sliced {@link Sequence}
+ */
 IterableSequence.prototype.slice = function(begin, end) { 
   let seq;
   if(undefined === begin) {

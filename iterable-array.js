@@ -19,6 +19,19 @@
 module.exports = IterableArray;
 const Iterable = require('./iterable');
 
+/**
+ * An {@link IterableArray} extends {@link Iterable} with functionality 
+ * specific to built-in JavaScript {@link Array} instances.
+ * 
+ * @class IterableArray
+ * @augments Iterable
+ * 
+ * @constructs IterableArray
+ * @function
+ * @param {Array} array  - An {@link Array}
+ * @returns {IterableArray} - A new {@link IterableArray}
+ * @throws {TypeError} - If `array` is not an {@link Array}
+ */
 function IterableArray(array) {
   if(!Array.isArray(array)) { 
     throw new TypeError('Can only wrap an Array'); 
@@ -30,9 +43,26 @@ function IterableArray(array) {
 IterableArray.prototype = Object.create(Iterable.prototype);
 
 IterableArray.prototype[Symbol.toStringTag] = 'IterableArray';
-IterableArray.prototype.slice = function(begin, end) { 
+
+/**
+ * Delegates to {@link Array#slice} and returns a new {@link IterableArray}.
+ * 
+ * @param {number} [begin]
+ * @param {number} [end]
+ * @returns {IterableArray}
+ * 
+ * @see Array#slice
+ */
+IterableArray.prototype.slice = function slice(begin, end) { 
   return IterableArray(this._iterable.slice(begin, end));
 };
+/**
+ * 
+ * 
+ * @param {function} mapper
+ * @param {object} that
+ * @returns {IterableArray}
+ */
 IterableArray.prototype.map = function(mapper, that) {
   return IterableArray(this._iterable.map(mapper, that));
 };
