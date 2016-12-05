@@ -10,8 +10,7 @@
     "test-node": "tape test/*.js | tap-notify | tap-diff",
     "docs": "documentation build *.js --config documentation.json --name Iterable --format html --output docs/",
     "readme": "documentation readme *.js --config documentation.json --section Usage --quiet",
-    "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json",
-    "jsdocs": "jsdoc -c jsdoc.json"
+    "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json"
   },
   "repository": {
     "type": "git",
