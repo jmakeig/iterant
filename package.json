@@ -33,9 +33,6 @@
   "devDependencies": {
     "concat-stream": "^1.5.2",
     "documentation": "^4.0.0-beta15",
-    "github-slugger": "^1.1.1",
-    "highlight.js": "^9.8.0",
-    "jsdoc": "^3.4.3",
     "mltap": "git://github.com/jmakeig/mltap.git#develop",
     "tape": "^4.6.3"
   },
