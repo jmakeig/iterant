@@ -9,7 +9,7 @@
     "test-marklogic": "mltap test/*.sjs | tap-notify | tap-diff",
     "test-node": "tape test/*.js | tap-notify | tap-diff",
     "docs": "documentation build *.js --config documentation.json --name Iterable --format html --output docs/",
-    "readme": "npm docs && documentation readme *.js --config documentation.json --section Usage --quiet",
+    "readme": "documentation readme *.js --config documentation.json --section Usage --quiet",
     "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json",
     "jsdocs": "jsdoc -c jsdoc.json"
   },
@@ -37,9 +37,7 @@
     "highlight.js": "^9.8.0",
     "jsdoc": "^3.4.3",
     "mltap": "git://github.com/jmakeig/mltap.git#develop",
-    "tape": "^4.6.3",
-    "vinyl": "^2.0.1",
-    "vinyl-fs": "^2.4.4"
+    "tape": "^4.6.3"
   },
   "optionalDependencies": {
     "faucet": "^0.0.1",
