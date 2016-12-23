@@ -10,7 +10,8 @@
     "test-node": "tape test/*.js | tap-notify | tap-diff",
     "docs": "documentation build *.js --config documentation.json --name Iterable --format html --output docs/",
     "readme": "documentation readme *.js --config documentation.json --section Usage --quiet",
-    "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json"
+    "docs-api": "documentation build *.js --config documentation.json --name Iterable --format json --output docs/docs.json",
+    "lint": "eslint  *.js test/*.*js -c .eslintrc.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "concat-stream": "^1.5.2",
     "documentation": "^4.0.0-beta15",
+    "eslint": "^3.12.0",
     "mltap": "git://github.com/jmakeig/mltap.git#develop",
     "tape": "^4.6.3"
   },
