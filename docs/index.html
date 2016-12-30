@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>Iterable  | Documentation</title>
+  <title>Iterant  | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -13,7 +13,7 @@
     <div class='clearfix md-mxn2'>
       <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'>Iterable</h3>
+          <h3 class='mb0 no-anchor'>Iterant</h3>
           <div class='mb1'><code></code></div>
           <input
             placeholder='Filter'
@@ -25,9 +25,9 @@
               
                 
                 <li><a
-                  href='#iterable'
+                  href='#iterant'
                   class=" toggle-sibling">
-                  Iterable
+                  Iterant
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -37,7 +37,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#IterableisIterable'
+                        href='#IterantisIterable'
                         class='regular pre-open'>
                         .isIterable
                       </a></li>
@@ -49,67 +49,67 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Iterable#iterable'
+                        href='#Iterant#iterable'
                         class='regular pre-open'>
                         #iterable
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#Symbol.iterator'
+                        href='#Iterant#Symbol.iterator'
                         class='regular pre-open'>
                         #Symbol.iterator
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#Symbol.toStringTag'
+                        href='#Iterant#Symbol.toStringTag'
                         class='regular pre-open'>
                         #Symbol.toStringTag
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#map'
+                        href='#Iterant#map'
                         class='regular pre-open'>
                         #map
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#reduce'
+                        href='#Iterant#reduce'
                         class='regular pre-open'>
                         #reduce
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#slice'
+                        href='#Iterant#slice'
                         class='regular pre-open'>
                         #slice
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#filter'
+                        href='#Iterant#filter'
                         class='regular pre-open'>
                         #filter
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#concat'
+                        href='#Iterant#concat'
                         class='regular pre-open'>
                         #concat
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#sort'
+                        href='#Iterant#sort'
                         class='regular pre-open'>
                         #sort
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#clone'
+                        href='#Iterant#clone'
                         class='regular pre-open'>
                         #clone
                       </a></li>
                       
                       <li><a
-                        href='#Iterable#toArray'
+                        href='#Iterant#toArray'
                         class='regular pre-open'>
                         #toArray
                       </a></li>
@@ -123,9 +123,9 @@
               
                 
                 <li><a
-                  href='#iterablearray'
+                  href='#iterantarray'
                   class=" toggle-sibling">
-                  IterableArray
+                  IterantArray
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -136,13 +136,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#IterableArray#slice'
+                        href='#IterantArray#slice'
                         class='regular pre-open'>
                         #slice
                       </a></li>
                       
                       <li><a
-                        href='#IterableArray#map'
+                        href='#IterantArray#map'
                         class='regular pre-open'>
                         #map
                       </a></li>
@@ -156,9 +156,9 @@
               
                 
                 <li><a
-                  href='#iterablesequence'
+                  href='#iterantsequence'
                   class=" toggle-sibling">
-                  IterableSequence
+                  IterantSequence
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -169,7 +169,7 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#IterableSequence#slice'
+                        href='#IterantSequence#slice'
                         class='regular pre-open'>
                         #slice
                       </a></li>
@@ -183,9 +183,9 @@
               
                 
                 <li><a
-                  href='#esiterable'
+                  href='#iterable'
                   class="">
-                  ESIterable
+                  Iterable
                   
                 </a>
                 
@@ -216,8 +216,8 @@
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='iterable'>
-      Iterable
+    <h3 class='fl m0' id='iterant'>
+      Iterant
     </h3>
     
     
@@ -227,14 +227,14 @@
   <p>Wraps any JavaScript iterable (i.e. an object that has a <code>Symbol.iterator</code> property) to
 provide a common iterface, regardless of the underlying concrete type. Where possible and
 apporpriate this interface matches the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>. Thus,
-you can call the same <a href="#iterablemap">Iterable#map</a> on an <code>Array</code>, a
-MarkLogic <code>Seqeunce</code>, or a generator—anything that’s iterable. Type-specific <a href="#iterable">Iterable</a>
+you can call the same <a href="#iterantmap">Iterant#map</a> on an <code>Array</code>, a
+MarkLogic <code>Seqeunce</code>, or a generator—anything that’s iterable. Type-specific <a href="#iterant">Iterant</a>
 extensions override the built-in methods to provide implementations that delegate to their
 wrapped concrete types.</p>
 
 
-  <div class='pre p1 fill-light mt0'>Iterable(iterable: <a href="#esiterable">ESIterable</a>): <a href="#iterable">Iterable</a></div>
-
+  <div class='pre p1 fill-light mt0'>Iterant(iterable: <a href="#iterable">Iterable</a>): <a href="#iterant">Iterant</a></div>
+  
   
 
   
@@ -249,7 +249,7 @@ wrapped concrete types.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>iterable</span> <code class='quiet'>(<a href="#esiterable">ESIterable</a>)</code>
+            <span class='code bold'>iterable</span> <code class='quiet'>(<a href="#iterable">Iterable</a>)</code>
 	    Any iterable (i.e. something that has a 
 <code>Symbol.iterator</code>
  property)
@@ -266,9 +266,9 @@ wrapped concrete types.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterable">Iterable</a></code>:
+      <code><a href="#iterant">Iterant</a></code>:
         An new 
-<a href="#iterable">Iterable</a>
+<a href="#iterant">Iterant</a>
  instance the wraps the passed in iterable
 
       
@@ -281,7 +281,7 @@ wrapped concrete types.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>Iterable(
+      <pre class='p1 overflow-auto round fill-light'>Iterant(
   cts.collections() <span class="hljs-comment">// Any iterable, such as Array, Map, generator function, etc.</span>
 )
   .filter(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-literal">true</span>) <span class="hljs-comment">// Not very discriminating</span>
@@ -295,7 +295,7 @@ wrapped concrete types.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='IterableisIterable'>
+    <div class='border-bottom' id='IterantisIterable'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -313,7 +313,7 @@ iterator. Note that strings are iterable by defintion in the language spec.</p>
 
 
   <div class='pre p1 fill-light mt0'>isIterable(obj: any, ignoreStrings: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
-
+  
   
 
   
@@ -368,11 +368,11 @@ iterator. Note that strings are iterable by defintion in the language spec.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>Iterable.isIterable([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);        <span class="hljs-comment">// true</span>
-Iterable.isIterable(<span class="hljs-string">'asdf'</span>);           <span class="hljs-comment">// true, unfortunately</span>
-Iterable.isIterable(<span class="hljs-string">'asdf'</span>, <span class="hljs-literal">true</span>)      <span class="hljs-comment">// false</span>
-Iterable.isIterable((<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>)</span>{})()) <span class="hljs-comment">// true</span>
-Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string">'A'</span>})          <span class="hljs-comment">// false</span></pre>
+      <pre class='p1 overflow-auto round fill-light'>Iterant.isIterable([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);        <span class="hljs-comment">// true</span>
+Iterant.isIterable(<span class="hljs-string">'asdf'</span>);           <span class="hljs-comment">// true, unfortunately</span>
+Iterant.isIterable(<span class="hljs-string">'asdf'</span>, <span class="hljs-literal">true</span>)      <span class="hljs-comment">// false</span>
+Iterant.isIterable((<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>)</span>{})()) <span class="hljs-comment">// true</span>
+Iterant.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string">'A'</span>})          <span class="hljs-comment">// false</span></pre>
     
   
 
@@ -394,7 +394,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Iterable#iterable'>
+    <div class='border-bottom' id='Iterant#iterable'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -409,7 +409,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
   
 
   <div class='pre p1 fill-light mt0'>iterable</div>
-
+  
   
 
   
@@ -425,9 +425,9 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>iterable</span> <code class='quiet'>(<a href="#esiterable">ESIterable</a>)</code>
+          <span class='code bold'>iterable</span> <code class='quiet'>(<a href="#iterable">Iterable</a>)</code>
           : The wrapped 
-<a href="#esiterable">ESIterable</a>
+<a href="#iterable">Iterable</a>
 
           
         </div>
@@ -451,7 +451,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#Symbol.iterator'>
+    <div class='border-bottom' id='Iterant#Symbol.iterator'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -467,7 +467,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
 
 
   <div class='pre p1 fill-light mt0'>Symbol.iterator</div>
-
+  
   
 
   
@@ -496,7 +496,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#Symbol.toStringTag'>
+    <div class='border-bottom' id='Iterant#Symbol.toStringTag'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -512,7 +512,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
 
 
   <div class='pre p1 fill-light mt0'>Symbol.toStringTag</div>
-
+  
   
 
   
@@ -541,7 +541,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#map'>
+    <div class='border-bottom' id='Iterant#map'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -557,7 +557,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
 
 
   <div class='pre p1 fill-light mt0'>map(fct: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: any?): <a href="#iterable">Iterable</a></div>
-
+  
   
 
   
@@ -626,7 +626,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#reduce'>
+    <div class='border-bottom' id='Iterant#reduce'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -642,7 +642,7 @@ Iterable.isIterable({<span class="hljs-attr">a</span>: <span class="hljs-string"
 
 
   <div class='pre p1 fill-light mt0'>reduce(reducer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, init: any): any</div>
-
+  
   
 
   
@@ -664,7 +664,7 @@ returns a new value for the next iteration.
 <li><strong><code>prev</code></strong> (<code>any</code>) The accumulated value returned from the previous iteration</li>
 <li><strong><code>item</code></strong> (<code>any</code>) The current item</li>
 <li><strong><code>index</code></strong> (<code>number</code>) The current index</li>
-<li><strong><code>self</code></strong> (<code><a href="#iterable">Iterable</a></code>)</li>
+<li><strong><code>self</code></strong> (<code><a href="#iterant">Iterant</a></code>)</li>
 </ul>
 
           </div>
@@ -701,7 +701,7 @@ returns a new value for the next iteration.
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>Iterable([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
+      <pre class='p1 overflow-auto round fill-light'>Iterant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
   .reduce(<span class="hljs-function">(<span class="hljs-params">prev, item</span>) =&gt;</span> prev + item, <span class="hljs-number">0</span>);
 
 <span class="hljs-comment">// First iteration:  (0, 1) =&gt; 1</span>
@@ -721,7 +721,7 @@ returns a new value for the next iteration.
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#slice'>
+    <div class='border-bottom' id='Iterant#slice'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -733,14 +733,14 @@ returns a new value for the next iteration.
 
   
 
-  <p>Get a subsection of an <a href="#iterable">Iterable</a> as an <a href="#iterable">Iterable</a> as
-new <a href="#iterable">Iterable</a>. The default implementation naïvely loops from
-the start of the <a href="#iterable">Iterable</a> to the <code>end</code>. Subclasses delegate to
-more efficient implementations, delegating to the backing {@ESIterable}.</p>
+  <p>Get a subsection of an <a href="#iterant">Iterant</a> as an <a href="#iterant">Iterant</a> as
+new <a href="#iterant">Iterant</a>. The default implementation naïvely loops from
+the start of the <a href="#iterant">Iterant</a> to the <code>end</code>. Subclasses delegate to
+more efficient implementations, delegating to the backing {@Iterable}.</p>
 
 
-  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterable">Iterable</a></div>
-
+  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterant">Iterant</a></div>
+  
   
 
   
@@ -765,7 +765,7 @@ more efficient implementations, delegating to the backing {@ESIterable}.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>end</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-	    The zero-based index before which to stop. Defaults to the rest of the {@Iterable}, which could be infinite. (Don’t do that.)
+	    The zero-based index before which to stop. Defaults to the rest of the {@Iterant}, which could be infinite. (Don’t do that.)
 
           </div>
           
@@ -779,9 +779,9 @@ more efficient implementations, delegating to the backing {@ESIterable}.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterable">Iterable</a></code>:
+      <code><a href="#iterant">Iterant</a></code>:
         A new 
-<a href="#iterable">Iterable</a>
+<a href="#iterant">Iterant</a>
 
       
     
@@ -801,7 +801,7 @@ more efficient implementations, delegating to the backing {@ESIterable}.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#filter'>
+    <div class='border-bottom' id='Iterant#filter'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -814,13 +814,13 @@ more efficient implementations, delegating to the backing {@ESIterable}.</p>
   
 
   <p>Evaluates each item using a supplied predicate function. Returns a new
-{@Iterable} containing only items for which the predicate returns <code>true</code>.</p>
+{@Iterant} containing only items for which the predicate returns <code>true</code>.</p>
 <p><strong>Warning:</strong> <code>filter</code> is almost always better implemented as an upstream query when
 you’re working with data from a database.</p>
 
 
-  <div class='pre p1 fill-light mt0'>filter(predicate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: any?): <a href="#iterable">Iterable</a></div>
-
+  <div class='pre p1 fill-light mt0'>filter(predicate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: any?): <a href="#iterant">Iterant</a></div>
+  
   
 
   
@@ -845,7 +845,7 @@ Return
 <ul>
 <li><strong><code>item</code></strong> (<code>any</code>) The current item</li>
 <li><strong><code>index</code></strong> (<code>number</code>) The current index</li>
-<li><strong><code>self</code></strong> (<code><a href="#iterable">Iterable</a></code>) </li>
+<li><strong><code>self</code></strong> (<code><a href="#iterant">Iterant</a></code>) </li>
 <li>Returns <code>boolean</code> - Whether the current <code>item</code> matches</li>
 </ul>
 
@@ -869,9 +869,9 @@ Return
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterable">Iterable</a></code>:
+      <code><a href="#iterant">Iterant</a></code>:
         A new 
-<a href="#iterable">Iterable</a>
+<a href="#iterant">Iterant</a>
  with only the matching items
 
       
@@ -892,7 +892,7 @@ Return
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#concat'>
+    <div class='border-bottom' id='Iterant#concat'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -904,12 +904,12 @@ Return
 
   
 
-  <p>Concatenates items onto the end of an <a href="#iterable">Iterable</a>, returning a new <a href="#iterable">Iterable</a> instance.
-<a href="#esiterable">ESIterable</a> instances are flattened. Other types are appended as-is.</p>
+  <p>Concatenates items onto the end of an <a href="#iterant">Iterant</a>, returning a new <a href="#iterant">Iterant</a> instance.
+<a href="#iterable">Iterable</a> instances are flattened. Other types are appended as-is.</p>
 
 
-  <div class='pre p1 fill-light mt0'>concat(items: ...any): <a href="#iterable">Iterable</a></div>
-
+  <div class='pre p1 fill-light mt0'>concat(items: ...any): <a href="#iterant">Iterant</a></div>
+  
   
 
   
@@ -939,9 +939,9 @@ Return
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterable">Iterable</a></code>:
+      <code><a href="#iterant">Iterant</a></code>:
         A new 
-<a href="#iterable">Iterable</a>
+<a href="#iterant">Iterant</a>
  instance
 
       
@@ -954,9 +954,9 @@ Return
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>Iterable([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
+      <pre class='p1 overflow-auto round fill-light'>Iterant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
   .concat(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, [<span class="hljs-number">6</span>, <span class="hljs-number">7</span>]);
-<span class="hljs-comment">// Iterable([1, 2, 3, 4, 5, 6, 7])</span></pre>
+<span class="hljs-comment">// Iterant([1, 2, 3, 4, 5, 6, 7])</span></pre>
     
   
 
@@ -970,7 +970,7 @@ Return
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#sort'>
+    <div class='border-bottom' id='Iterant#sort'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -987,8 +987,8 @@ Return
 eagerly instantiates an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> and sorts using <a href="Array#sort">Array#sort</a>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>sort(comparator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>?): <a href="#iterablearray">IterableArray</a></div>
-
+  <div class='pre p1 fill-light mt0'>sort(comparator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>?): <a href="#iterantarray">IterantArray</a></div>
+  
   
 
   
@@ -1026,8 +1026,8 @@ The default converts both values to
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablearray">IterableArray</a></code>:
-        A sorted {@IterableArray}
+      <code><a href="#iterantarray">IterantArray</a></code>:
+        A sorted {@IterantArray}
 
       
     
@@ -1047,7 +1047,7 @@ The default converts both values to
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#clone'>
+    <div class='border-bottom' id='Iterant#clone'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1059,11 +1059,11 @@ The default converts both values to
 
   
 
-  <p>Creates a new shallow copy of the <a href="#iterable">Iterable</a>.</p>
+  <p>Creates a new shallow copy of the <a href="#iterant">Iterant</a>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>clone(): <a href="#iterable">Iterable</a></div>
-
+  <div class='pre p1 fill-light mt0'>clone(): <a href="#iterant">Iterant</a></div>
+  
   
 
   
@@ -1079,9 +1079,9 @@ The default converts both values to
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterable">Iterable</a></code>:
+      <code><a href="#iterant">Iterant</a></code>:
         A new 
-<a href="#iterable">Iterable</a>
+<a href="#iterant">Iterant</a>
  instance
 
       
@@ -1094,7 +1094,7 @@ The default converts both values to
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> a = Iterable([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> a = Iterant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
 <span class="hljs-keyword">const</span> b = a.clone();
 a !== b; <span class="hljs-comment">// true</span></pre>
     
@@ -1110,7 +1110,7 @@ a !== b; <span class="hljs-comment">// true</span></pre>
       </div>
     </div>
   
-    <div class='border-bottom' id='Iterable#toArray'>
+    <div class='border-bottom' id='Iterant#toArray'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1122,12 +1122,12 @@ a !== b; <span class="hljs-comment">// true</span></pre>
 
   
 
-  <p>Converts an <a href="#iterable">Iterable</a> to an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.
+  <p>Converts an <a href="#iterant">Iterant</a> to an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.
 This is a pass-through for <a href="Array~from">Array~from</a> that’s convenient for chaining.</p>
 
 
   <div class='pre p1 fill-light mt0'>toArray()</div>
-
+  
   
 
   
@@ -1149,7 +1149,7 @@ This is a pass-through for <a href="Array~from">Array~from</a> that’s convenie
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">gen</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) { <span class="hljs-keyword">yield</span> [<span class="hljs-built_in">String</span>(i), i]; }};
-Iterable(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>(gen))
+Iterant(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>(gen))
   .toArray();
 
 =&gt;
@@ -1191,25 +1191,25 @@ Iterable(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='iterablearray'>
-      IterableArray
+    <h3 class='fl m0' id='iterantarray'>
+      IterantArray
     </h3>
     
     
   </div>
   
 
-  <p>An <a href="#iterablearray">IterableArray</a> extends <a href="#iterable">Iterable</a> with functionality
+  <p>An <a href="#iterantarray">IterantArray</a> extends <a href="#iterant">Iterant</a> with functionality
 specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> instances.</p>
 
 
-  <div class='pre p1 fill-light mt0'>IterableArray(array: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="#iterablearray">IterableArray</a></div>
-
+  <div class='pre p1 fill-light mt0'>IterantArray(array: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="#iterantarray">IterantArray</a></div>
+  
   
     <p>
       Extends
       
-        <a href="#iterable">Iterable</a>
+        <a href="#iterant">Iterant</a>
       
     </p>
   
@@ -1242,9 +1242,9 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablearray">IterableArray</a></code>:
+      <code><a href="#iterantarray">IterantArray</a></code>:
         A new 
-<a href="#iterablearray">IterableArray</a>
+<a href="#iterantarray">IterantArray</a>
 
       
     
@@ -1271,7 +1271,7 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='IterableArray#slice'>
+    <div class='border-bottom' id='IterantArray#slice'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1283,11 +1283,11 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
 
   
 
-  <p>Delegates to <a href="Array#slice">Array#slice</a> and returns a new <a href="#iterablearray">IterableArray</a>.</p>
+  <p>Delegates to <a href="Array#slice">Array#slice</a> and returns a new <a href="#iterantarray">IterantArray</a>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterablearray">IterableArray</a></div>
-
+  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterantarray">IterantArray</a></div>
+  
   
 
   
@@ -1324,7 +1324,7 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablearray">IterableArray</a></code>:
+      <code><a href="#iterantarray">IterantArray</a></code>:
         
 
       
@@ -1345,7 +1345,7 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
       </div>
     </div>
   
-    <div class='border-bottom' id='IterableArray#map'>
+    <div class='border-bottom' id='IterantArray#map'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1359,8 +1359,8 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
 
   
 
-  <div class='pre p1 fill-light mt0'>map(mapper: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#iterablearray">IterableArray</a></div>
-
+  <div class='pre p1 fill-light mt0'>map(mapper: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, that: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#iterantarray">IterantArray</a></div>
+  
   
 
   
@@ -1397,7 +1397,7 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablearray">IterableArray</a></code>:
+      <code><a href="#iterantarray">IterantArray</a></code>:
         
 
       
@@ -1433,25 +1433,25 @@ specific to built-in JavaScript <a href="https://developer.mozilla.org/en-US/doc
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='iterablesequence'>
-      IterableSequence
+    <h3 class='fl m0' id='iterantsequence'>
+      IterantSequence
     </h3>
     
     
   </div>
   
 
-  <p>An <a href="#iterablesequence">IterableSequence</a> extends <a href="#iterable">Iterable</a> with functionality
+  <p>An <a href="#iterantsequence">IterantSequence</a> extends <a href="#iterant">Iterant</a> with functionality
 specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
 
 
-  <div class='pre p1 fill-light mt0'>IterableSequence(sequence: Sequence): <a href="#iterablesequence">IterableSequence</a></div>
-
+  <div class='pre p1 fill-light mt0'>IterantSequence(sequence: Sequence): <a href="#iterantsequence">IterantSequence</a></div>
+  
   
     <p>
       Extends
       
-        <a href="#iterable">Iterable</a>
+        <a href="#iterant">Iterant</a>
       
     </p>
   
@@ -1484,9 +1484,9 @@ specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablesequence">IterableSequence</a></code>:
+      <code><a href="#iterantsequence">IterantSequence</a></code>:
         A new 
-<a href="#iterablesequence">IterableSequence</a>
+<a href="#iterantsequence">IterantSequence</a>
 
       
     
@@ -1513,7 +1513,7 @@ specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='IterableSequence#slice'>
+    <div class='border-bottom' id='IterantSequence#slice'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1525,14 +1525,14 @@ specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
 
   
 
-  <p>Returns a shallow copy of a portion of the <a href="#iterable">Iterable</a> into a new
-<a href="#iterablesequence">IterableSequence</a> object selected from <code>begin</code> to <code>end</code>, not including <code>end</code>.
-<code>slice</code> does not modify the original <a href="#iterablesequence">IterableSequence</a>.</p>
+  <p>Returns a shallow copy of a portion of the <a href="#iterant">Iterant</a> into a new
+<a href="#iterantsequence">IterantSequence</a> object selected from <code>begin</code> to <code>end</code>, not including <code>end</code>.
+<code>slice</code> does not modify the original <a href="#iterantsequence">IterantSequence</a>.</p>
 <p>The implementation delegates to <a href="https://docs.marklogic.com/fn.subsequence">fn.subsequence()</a> under the covers.</p>
 
 
-  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterablesequence">IterableSequence</a></div>
-
+  <div class='pre p1 fill-light mt0'>slice(begin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#iterantsequence">IterantSequence</a></div>
+  
   
 
   
@@ -1571,7 +1571,7 @@ specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#iterablesequence">IterableSequence</a></code>:
+      <code><a href="#iterantsequence">IterantSequence</a></code>:
         A shallow copy of the sliced 
 <a href="Sequence">Sequence</a>
 
@@ -1586,10 +1586,10 @@ specific to MarkLogic <a href="Sequence">Sequence</a> instances.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> seq = xdmp.databases();      <span class="hljs-comment">// Sequence&lt;xs.unsignedLong&gt;</span>
-<span class="hljs-keyword">const</span> itr = IterableSequence(seq); <span class="hljs-comment">// IterableSequence&lt;Sequence&lt;xs.unsignedLong&gt;&gt;</span>
+<span class="hljs-keyword">const</span> itr = IterantSequence(seq); <span class="hljs-comment">// IterantSequence&lt;Sequence&lt;xs.unsignedLong&gt;&gt;</span>
 itr
- .slice(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)                      <span class="hljs-comment">// IterableSequence&lt;xs.unsignedLong&gt;</span>
- .map(xdmp.databaseName)           <span class="hljs-comment">// Iterable&lt;Generator&lt;string&gt;&gt;</span>
+ .slice(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)                      <span class="hljs-comment">// IterantSequence&lt;xs.unsignedLong&gt;</span>
+ .map(xdmp.databaseName)           <span class="hljs-comment">// Iterant&lt;Generator&lt;string&gt;&gt;</span>
  .toArray()                        <span class="hljs-comment">// Array&lt;string&gt;</span>
 
 <span class="hljs-comment">// ["Meters" , "Triggers"]</span></pre>
@@ -1621,8 +1621,8 @@ itr
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='esiterable'>
-      ESIterable
+    <h3 class='fl m0' id='iterable'>
+      Iterable
     </h3>
     
     
@@ -1638,8 +1638,13 @@ implement the Iterable protocol, including <code>Array</code> and <code>Map</cod
 it can be utilized by any version of JavaScript.</p>
 
 
-  <div class='pre p1 fill-light mt0'>ESIterable</div>
-
+  <div class='pre p1 fill-light mt0'>Iterable</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
   
 
   
@@ -1714,7 +1719,12 @@ it can be utilized by any version of JavaScript.</p>
 
 
   <div class='pre p1 fill-light mt0'>Iterator</div>
-
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
   
 
   

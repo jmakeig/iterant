@@ -16,65 +16,65 @@
  
  'use strict';
 
-module.exports = IterableArray;
-const Iterable = require('./iterable');
+module.exports = IterantArray;
+const Iterant = require('./iterant');
 
 /**
- * An {@link IterableArray} extends {@link Iterable} with functionality 
+ * An {@link IterantArray} extends {@link Iterant} with functionality 
  * specific to built-in JavaScript {@link Array} instances.
  * 
- * @class IterableArray
- * @augments Iterable
+ * @class IterantArray
+ * @augments Iterant
  * 
- * @constructs IterableArray
+ * @constructs IterantArray
  * @function
  * @param {Array} array  - An {@link Array}
- * @returns {IterableArray} - A new {@link IterableArray}
+ * @returns {IterantArray} - A new {@link IterantArray}
  * @throws {TypeError} - If `array` is not an {@link Array}
  */
-function IterableArray(array) {
+function IterantArray(array) {
   if(!Array.isArray(array)) { 
     throw new TypeError('Can only wrap an Array'); 
   }
-  if(!this) { return new IterableArray(array); }
-  return Iterable.call(this, array); 
+  if(!this) { return new IterantArray(array); }
+  return Iterant.call(this, array); 
 }
-// Inherit from Iterable
-IterableArray.prototype = Object.create(Iterable.prototype);
+// Inherit from Iterant
+IterantArray.prototype = Object.create(Iterant.prototype);
 
-IterableArray.prototype[Symbol.toStringTag] = 'IterableArray';
+IterantArray.prototype[Symbol.toStringTag] = 'IterantArray';
 
 /**
- * Delegates to {@link Array#slice} and returns a new {@link IterableArray}.
+ * Delegates to {@link Array#slice} and returns a new {@link IterantArray}.
  * 
  * @param {number} [begin]
  * @param {number} [end]
- * @returns {IterableArray}
+ * @returns {IterantArray}
  * 
  * @see Array#slice
  */
-IterableArray.prototype.slice = function slice(begin, end) { 
-  return IterableArray(this._iterable.slice(begin, end));
+IterantArray.prototype.slice = function slice(begin, end) { 
+  return IterantArray(this._iterable.slice(begin, end));
 };
 /**
  * 
  * 
  * @param {function} mapper
  * @param {object} that
- * @returns {IterableArray}
+ * @returns {IterantArray}
  */
-IterableArray.prototype.map = function(mapper, that) {
-  return IterableArray(this._iterable.map(mapper, that));
+IterantArray.prototype.map = function(mapper, that) {
+  return IterantArray(this._iterable.map(mapper, that));
 };
-IterableArray.prototype.reduce = function(reducer, init) {
+IterantArray.prototype.reduce = function(reducer, init) {
   return this._iterable.reduce(reducer, init);
 };
-IterableArray.prototype.filter = function(predicate, that) {
-  return IterableArray(this._iterable.filter(predicate, that));
+IterantArray.prototype.filter = function(predicate, that) {
+  return IterantArray(this._iterable.filter(predicate, that));
 };
-IterableArray.prototype.concat = function(...args) {
-  return IterableArray(this._iterable.concat(...args));
+IterantArray.prototype.concat = function(...args) {
+  return IterantArray(this._iterable.concat(...args));
 };
-IterableArray.prototype.sort = function(comparator) {
-  return IterableArray(this._iterable.sort(comparator));
+IterantArray.prototype.sort = function(comparator) {
+  return IterantArray(this._iterable.sort(comparator));
 };

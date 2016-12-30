@@ -18,35 +18,35 @@
 
 const test = require('/mltap/test');
 
-const Iterable = require('../iterable');
-const IterableSequence = require('../iterable-sequence');
+const Iterant = require('../iterant');
+const IterantSequence = require('../iterant-sequence');
 
 function seqEqual(actual, expected, msg) {
-  this.deepEqual(Array.from(actual), Array.from(expected), msg);
+  this.deepEqual(Array.from(actual), Array.from(expected), msg); // eslint-disable-line no-invalid-this
 }
 
-test('IterableSequence factory', (assert) => {
+test('IterantSequence factory', (assert) => {
   const seq = Sequence.from(['a', 'b', 'c']);
-  const iterable = IterableSequence(seq);
+  const iterable = IterantSequence(seq);
   assert.notEqual(iterable, undefined, 'Factory constructor');
-  assert.true(iterable instanceof IterableSequence, 'instanceof IterableSequence');
-  assert.true(iterable instanceof Iterable, 'instanceof Iterable');
+  assert.true(iterable instanceof IterantSequence, 'instanceof IterantSequence');
+  assert.true(iterable instanceof Iterant, 'instanceof Iterable');
   assert.equal(typeof iterable.xpath, 'function', 'xpath method is a function');
-  assert.equal(Object.prototype.toString.call(iterable), '[object IterableSequence]');
-  assert.equal(iterable[Symbol.species], IterableSequence, 'species');
+  assert.equal(Object.prototype.toString.call(iterable), '[object IterantSequence]');
+  assert.equal(iterable[Symbol.species], IterantSequence, 'species');
   assert.equal(typeof iterable[Symbol.iterator], 'function', 'iterator');
   assert.end();
 });
 
-test('IterableSequence.prototype.slice', (assert) => {
+test('IterantSequence.prototype.slice', (assert) => {
   assert.seqEqual = seqEqual;
   const seq = Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']);
-  const iterable = IterableSequence(seq);
+  const iterable = IterantSequence(seq);
   assert.notEqual(iterable.slice(), iterable, 'slice() returns a new instance');
-  assert.true(iterable.slice() instanceof IterableSequence, 'instanceof IterableSequence');
+  assert.true(iterable.slice() instanceof IterantSequence, 'instanceof IterantSequence');
   assert.seqEqual(
     iterable.slice(), 
-    IterableSequence(Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']))
+    IterantSequence(Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']))
   );
   assert.seqEqual(iterable.slice(1), ['b', 'c', 'd', 'e', 'f'], 'only begin param');
   assert.seqEqual(iterable.slice(3, 5), ['d', 'e'], 'begin and end');
@@ -54,49 +54,49 @@ test('IterableSequence.prototype.slice', (assert) => {
   assert.seqEqual(iterable.slice(3, 1000), ['d', 'e', 'f'], 'end is larger than rest');
 
   assert.throws(() => {
-    iterable.slice('a')
+    iterable.slice('a');
   }, TypeError, 'non-number begin');
   assert.throws(() => {
-    iterable.slice(-1)
+    iterable.slice(-1);
   }, TypeError, 'negative begin');
   assert.throws(() => {
-    iterable.slice(44.44)
+    iterable.slice(44.44);
   }, TypeError, 'non-integer begin');
 
   assert.throws(() => {
-    iterable.slice(1, 'a')
+    iterable.slice(1, 'a');
   }, TypeError, 'non-number end');
   assert.throws(() => {
-    iterable.slice(1, -1)
+    iterable.slice(1, -1);
   }, TypeError, 'negative end');
   assert.throws(() => {
-    iterable.slice(1, 44.44)
+    iterable.slice(1, 44.44);
   }, TypeError, 'non-integer end');
   assert.throws(() => { 
-    iterable.slice(11, 10)
+    iterable.slice(11, 10);
   }, TypeError, 'end < begin');
 
   assert.end();
 });
 
-test('IterableSequence.prototype.sort', (assert) => {
+test('IterantSequence.prototype.sort', (assert) => {
   assert.seqEqual = seqEqual;
   const seq = Sequence.from(['b', 'a', 'f', 'd', 'c', 'e']);
-  const iterable = IterableSequence(seq);
+  const iterable = IterantSequence(seq);
   assert.seqEqual(iterable.sort(), ['a', 'b', 'c', 'd', 'e', 'f'], 'default sort');
   assert.seqEqual(iterable.sort((a, b) => a < b), ['f', 'e', 'd', 'c', 'b', 'a'], 'custom comparator');
   assert.notEqual(iterable.sort(), iterable, 'returns a new instance');
-  assert.equal(Object.prototype.toString.call(iterable.sort()), '[object IterableArray]', 'explict IterableArray return');
+  assert.equal(Object.prototype.toString.call(iterable.sort()), '[object IterantArray]', 'explict IterantArray return');
   assert.end();
 });
 
 /**
  * For each argument, if it's Iterable add its items, otherwise just add it
  */
-test('IterableSequence.prototype.concat', (assert) => {
+test('IterantSequence.prototype.concat', (assert) => {
   assert.seqEqual = seqEqual;
   const seq = Sequence.from(['a', 'b', 'c', 'd', 'e', 'f']);
-  const iterable = IterableSequence(seq);
+  const iterable = IterantSequence(seq);
   assert.notEqual(iterable.concat(), iterable, 'returns a copy');
   assert.seqEqual(iterable.concat(['g', 'h', 'i']), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], 'flat concat');
   assert.seqEqual(iterable.concat(['g', 'h', ['i']]), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', ['i']], 'keep nested concat');

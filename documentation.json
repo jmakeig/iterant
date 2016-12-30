@@ -1,9 +1,9 @@
 { "toc": 
   [
+    "Iterant",
+    "IterantArray",
+    "IterantSequence",
     "Iterable",
-    "IterableArray",
-    "IterableSequence",
-    "ESIterable",
     "Iterator"
   ]
 }

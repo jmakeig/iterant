@@ -16,9 +16,9 @@
  
 'use strict';
 
-module.exports = Iterable;
+module.exports = Iterant;
 // Watch out: Circular dependency. The export needs to happen before the require
-const IterableArray = require('./iterable-array.js');
+const IterantArray = require('./iterant-array.js');
 
 /* Inspired by <http://www.benmvp.com/learning-es6-generators-as-iterators/> */
 
@@ -47,7 +47,7 @@ const IterableArray = require('./iterable-array.js');
  * While described by the [ES2015 version of JavaScript](http://www.ecma-international.org/ecma-262/6.0/#sec-iterable-interface)
  * it can be utilized by any version of JavaScript.
  *
- * @typedef {Object} ESIterable
+ * @typedef {Object} Iterable
  * @template T The type of each iterated value
  * @property {function (): Iterator<T>} Symbol.iterator
  *   A method which produces an Iterator for this Iterable.
@@ -57,13 +57,13 @@ const IterableArray = require('./iterable-array.js');
  * Wraps any JavaScript iterable (i.e. an object that has a `Symbol.iterator` property) to
  * provide a common iterface, regardless of the underlying concrete type. Where possible and 
  * apporpriate this interface matches the built-in {@link Array}. Thus,
- * you can call the same {@link Iterable#map} on an `Array`, a
- * MarkLogic `Seqeunce`, or a generator—anything that’s iterable. Type-specific {@link Iterable} 
+ * you can call the same {@link Iterant#map} on an `Array`, a
+ * MarkLogic `Seqeunce`, or a generator—anything that’s iterable. Type-specific {@link Iterant} 
  * extensions override the built-in methods to provide implementations that delegate to their 
  * wrapped concrete types.
  * 
  * @example
- * Iterable(
+ * Iterant(
  *   cts.collections() // Any iterable, such as Array, Map, generator function, etc.
  * )
  *   .filter(c => true) // Not very discriminating
@@ -71,23 +71,23 @@ const IterableArray = require('./iterable-array.js');
  *   .sort((a, b) => b.count - a.count)
  *   .reduce((prev, item) => prev + '\r' + item.count + ': ' + item.name, '');
  * 
- * @class Iterable
- * @constructs Iterable
+ * @class Iterant
+ * @constructs Iterant
  * 
  * @function
- * @param {ESIterable} iterable - Any iterable (i.e. something that has a `Symbol.iterator` property)
- * @returns {Iterable} - An new {@link Iterable} instance the wraps the passed in iterable
+ * @param {Iterable} iterable - Any iterable (i.e. something that has a `Symbol.iterator` property)
+ * @returns {Iterant} - An new {@link Iterant} instance the wraps the passed in iterable
  * 
- * @see IterableArray
- * @see IterableSequence
+ * @see IterantArray
+ * @see IterantSequence
  */
-function Iterable(iterable) {
-  if(!this) { return new Iterable(iterable); } // Call as a factory, 
+function Iterant(iterable) {
+  if(!this) { return new Iterant(iterable); } // Call as a factory, 
                                                // not a constructor
   /** 
-   * @memberof Iterable
+   * @memberof Iterant
    * @instance
-   * @property {ESIterable} _iterable - The wrapped iterable
+   * @property {Iterable} _iterable - The wrapped iterable
    * @name _iterable
    * @private 
    */
@@ -99,9 +99,9 @@ function Iterable(iterable) {
       value: iterable
     },
     /**
-     * @memberof Iterable
+     * @memberof Iterant
      * @instance
-     * @property {ESIterable} iterable - The wrapped {@link ESIterable}
+     * @property {Iterable} iterable - The wrapped {@link Iterable}
      * @readonly
      */
     'iterable': {
@@ -120,19 +120,19 @@ function Iterable(iterable) {
  * iterator. Note that strings are iterable by defintion in the language spec.
  * 
  * @example
- * Iterable.isIterable([1, 2, 3]);        // true
- * Iterable.isIterable('asdf');           // true, unfortunately
- * Iterable.isIterable('asdf', true)      // false
- * Iterable.isIterable((function*(){})()) // true
- * Iterable.isIterable({a: 'A'})          // false
+ * Iterant.isIterable([1, 2, 3]);        // true
+ * Iterant.isIterable('asdf');           // true, unfortunately
+ * Iterant.isIterable('asdf', true)      // false
+ * Iterant.isIterable((function*(){})()) // true
+ * Iterant.isIterable({a: 'A'})          // false
  * 
- * @memberof Iterable
+ * @memberof Iterant
  * 
  * @param {*} obj - Any object, including `null` or `undefined`
  * @param {boolean} [ignoreStrings] - Don’t consider a string iterable. Be careful how you employ this.
  * @returns {boolean} Whether the object is iterable
  */
-Iterable.isIterable = function(obj, ignoreStrings) {
+Iterant.isIterable = function(obj, ignoreStrings) {
   if(null === obj || 'undefined' === typeof obj) return false;
   if('string' === typeof obj && true === ignoreStrings) return false;
   return Boolean(obj[Symbol.iterator]);
@@ -142,17 +142,17 @@ Iterable.isIterable = function(obj, ignoreStrings) {
  * an iterable.
  * 
  * @private
- * @memberof Iterable
+ * @memberof Iterant
  * 
- * @param {iterable} iterable d
+ * @param {Iterable} iterable d
  * @param {function} fct - A mapper function 
  * @param {object} [that] - The optional `this` object to which `fct` is bound. Defaults to `null`.
  * @returns {Iterable} Yields mapped items
  * @throws {TypeError}
  */
-Iterable.map = function*(iterable, fct, that) {
-  if(!Iterable.isIterable(iterable)) { 
-    throw new TypeError('iterable must be iterable'); 
+Iterant.map = function*(iterable, fct, that) {
+  if(!Iterant.isIterable(iterable)) { 
+    throw new TypeError('iterable must be Iterable'); 
   }
   if('function' !== typeof fct) { 
     throw new TypeError('fct must be a function'); 
@@ -162,18 +162,18 @@ Iterable.map = function*(iterable, fct, that) {
   }
 };
 /**
- * Same as `Iterable.prototype.map` but delegates to the called generator, 
+ * Same as `Iterant.prototype.map` but delegates to the called generator, 
  * i.e. `yield*` instead of `yield`.
  * 
  * @private
- * @memberof Iterable
+ * @memberof Iterant
  * 
  * @param {Iterable} iterable
  * @param {GeneratorFunction} gen
  * @param {object} [that]
  */
-Iterable.delegate = function*(iterable, gen, that) {
-  if(!Iterable.isIterable(iterable)) { throw new TypeError('iterable must be iterable'); }
+Iterant.delegate = function*(iterable, gen, that) {
+  if(!Iterant.isIterable(iterable)) { throw new TypeError('iterable must be Iterable'); }
   if('function' !== typeof gen) { throw new TypeError('gen must be a generator function'); }
   for(const item of iterable) {
     yield* gen.call(that || null, item);
@@ -182,16 +182,16 @@ Iterable.delegate = function*(iterable, gen, that) {
 /**
  * 
  * @private
- * @memberof Iterable
+ * @memberof Iterant
  * 
  * @param {Iterable} iterable
  * @param {function} fct - The reducer
  * @param {*} init - The initial value     
  * @returns {*}
  */
-Iterable.reduce = function(iterable, fct, init) {
-  if(!Iterable.isIterable(iterable)) { 
-    throw new TypeError('iterable must be iterable'); 
+Iterant.reduce = function(iterable, fct, init) {
+  if(!Iterant.isIterable(iterable)) { 
+    throw new TypeError('iterable must be Iterable'); 
   }
   let value = init, index = 0;
   for(const item of iterable) {
@@ -203,7 +203,7 @@ Iterable.reduce = function(iterable, fct, init) {
  * Yeilds a portion of an iterable between two offsets.
  * 
  * @private
- * @memberof Iterable
+ * @memberof Iterant
  * 
  * @param {Iterable} iterable - Any iterable
  * @param {number} begin - The starting offset (zero-based)
@@ -211,10 +211,10 @@ Iterable.reduce = function(iterable, fct, init) {
  * @returns {Iterable} - Yields an iterable
  * 
  * @example
- * Iterable([1, 2, 3, 4]).slice(1, 3); // [2, 3] 
+ * Iterant([1, 2, 3, 4]).slice(1, 3); // [2, 3] 
  */
-Iterable.slice = function*(iterable, begin, end) {
-  if(!Iterable.isIterable(iterable)) { 
+Iterant.slice = function*(iterable, begin, end) {
+  if(!Iterant.isIterable(iterable)) { 
     throw new TypeError('iterable must be iterable'); 
   }
   if('undefined' === typeof begin) { 
@@ -234,7 +234,7 @@ Iterable.slice = function*(iterable, begin, end) {
 
 /*
  * Filter predicate
- * @callback Iterable~filterPredicate
+ * @callback Iterant~filterPredicate
  * @param {*} item
  * @param {number} index
  * @param {Array} array
@@ -244,14 +244,14 @@ Iterable.slice = function*(iterable, begin, end) {
 /**
  * 
  * @private
- * @memberof Iterable
+ * @memberof Iterant
  * 
  * @param {Iterable} iterable - The {@link Iterable} to filter
  * @param {function} predicate - Called for each `item` at `index`. Return `true` to keep, `false` to ignore
  * @param {*} that - `this` binding of `predicate` call
  */
-Iterable.filter = function*(iterable, predicate, that) {
-  if(!Iterable.isIterable(iterable)) { 
+Iterant.filter = function*(iterable, predicate, that) {
+  if(!Iterant.isIterable(iterable)) { 
     throw new TypeError('iterable must be iterable'); 
   }
   if('function' !== typeof predicate) { 
@@ -264,7 +264,7 @@ Iterable.filter = function*(iterable, predicate, that) {
     }
   }
 };
-Iterable.concat = function*(iterable, ...args) {
+Iterant.concat = function*(iterable, ...args) {
   yield* iterable;
   for(const arg of args) {
     yield* arg;
@@ -276,23 +276,23 @@ Iterable.concat = function*(iterable, ...args) {
  * Gets the iterator associated with the underlying concrete iterable.
  * 
  * @name Symbol.iterator
- * @memberof Iterable
+ * @memberof Iterant
  * @instance
  * @type {Iterator}
  * @readonly
  */
-Iterable.prototype[Symbol.iterator] = function*() { yield* this._iterable; };
+Iterant.prototype[Symbol.iterator] = function*() { yield* this._iterable; };
 /**
  * The type name that shows up in {@Obejct#toString}.
  * 
  * @name Symbol.toStringTag
- * @memberof Iterable
+ * @memberof Iterant
  * @instance
  * @type {string}
  * @readonly
  */
-Iterable.prototype[Symbol.toStringTag] = 'Iterable';
-// Iterable.prototype[Symbol.species] = Iterable;
+Iterant.prototype[Symbol.toStringTag] = 'Iterant';
+// Iterant.prototype[Symbol.species] = Iterant;
 
 /**
  * Applys a function to each item of the current iterable and returns a new iterable. 
@@ -301,17 +301,17 @@ Iterable.prototype[Symbol.toStringTag] = 'Iterable';
  * @param {*} [that=null] - What `this` should mean when calling `fct` (i.e. the first parameter of `Function.prototype.call`) 
  * @returns {Iterable} - A new {@link Iterable} containing the mapped items
  */
-Iterable.prototype.map = function map(fct, that) {
+Iterant.prototype.map = function map(fct, that) {
   const Constructor = this._iterable[Symbol.species] || Iterable; 
   return Constructor(
-    Iterable.map(this._iterable, fct, that)
+    Iterant.map(this._iterable, fct, that)
   );
 };
 /**
  * Accumulate an aggregate value over all of an {@link Iterable} instance’s items. 
  * 
  * @example
- * Iterable([1, 2, 3])
+ * Iterant([1, 2, 3])
  *   .reduce((prev, item) => prev + item, 0);
  * 
  * // First iteration:  (0, 1) => 1
@@ -324,32 +324,32 @@ Iterable.prototype.map = function map(fct, that) {
  *   * **`prev`** (`any`) The accumulated value returned from the previous iteration
  *   * **`item`** (`any`) The current item
  *   * **`index`** (`number`) The current index
- *   * **`self`** (<code>{@link Iterable}</code>) 
+ *   * **`self`** (<code>{@link Iterant}</code>) 
  * @param {*} init - The initial value
  * @returns {*} - The accumlated value
  */
-Iterable.prototype.reduce = function reduce(reducer, init) {
-  return Iterable.reduce(this, reducer, init);
+Iterant.prototype.reduce = function reduce(reducer, init) {
+  return Iterant.reduce(this, reducer, init);
 };
 /**
- * Get a subsection of an {@link Iterable} as an {@link Iterable} as 
- * new {@link Iterable}. The default implementation naïvely loops from 
- * the start of the {@link Iterable} to the `end`. Subclasses delegate to
- * more efficient implementations, delegating to the backing {@ESIterable}.
+ * Get a subsection of an {@link Iterant} as an {@link Iterant} as 
+ * new {@link Iterant}. The default implementation naïvely loops from 
+ * the start of the {@link Iterant} to the `end`. Subclasses delegate to
+ * more efficient implementations, delegating to the backing {@Iterable}.
  * 
  * @param {number} begin - The zero-based index where to start
- * @param {number} [end] - The zero-based index before which to stop. Defaults to the rest of the {@Iterable}, which could be infinite. (Don’t do that.)  
- * @returns {Iterable} - A new {@link Iterable}
+ * @param {number} [end] - The zero-based index before which to stop. Defaults to the rest of the {@Iterant}, which could be infinite. (Don’t do that.)  
+ * @returns {Iterant} - A new {@link Iterant}
  */
-Iterable.prototype.slice = function slice(begin, end) {
-  const Constructor = this._iterable[Symbol.species] || Iterable; 
+Iterant.prototype.slice = function slice(begin, end) {
+  const Constructor = this._iterable[Symbol.species] || Iterant; 
   return Constructor(
-    Iterable.slice(this._iterable, begin, end)
+    Iterant.slice(this._iterable, begin, end)
   );
 };
 /**
  * Evaluates each item using a supplied predicate function. Returns a new 
- * {@Iterable} containing only items for which the predicate returns `true`.
+ * {@Iterant} containing only items for which the predicate returns `true`.
  * 
  * **Warning:** `filter` is almost always better implemented as an upstream query when 
  * you’re working with data from a database. 
@@ -358,33 +358,33 @@ Iterable.prototype.slice = function slice(begin, end) {
  * Return `true` to keep the item, `false` to ignore.
  *   * **`item`** (`any`) The current item
  *   * **`index`** (`number`) The current index
- *   * **`self`** (<code>{@link Iterable}</code>) 
+ *   * **`self`** (<code>{@link Iterant}</code>) 
  *   * Returns `boolean` - Whether the current `item` matches
  * @param {*} [that]
- * @returns {Iterable} - A new {@link Iterable} with only the matching items
+ * @returns {Iterant} - A new {@link Iterant} with only the matching items
  */
-Iterable.prototype.filter = function filter(predicate, that) {
-  const Constructor = this._iterable[Symbol.species] || Iterable; 
+Iterant.prototype.filter = function filter(predicate, that) {
+  const Constructor = this._iterable[Symbol.species] || Iterant; 
   return Constructor(
-    Iterable.filter(this._iterable, predicate, that)
+    Iterant.filter(this._iterable, predicate, that)
   );
 };
 /**
- * Concatenates items onto the end of an {@link Iterable}, returning a new {@link Iterable} instance. 
- * {@link ESIterable} instances are flattened. Other types are appended as-is. 
+ * Concatenates items onto the end of an {@link Iterant}, returning a new {@link Iterant} instance. 
+ * {@link Iterable} instances are flattened. Other types are appended as-is. 
  * 
  * @example
- * Iterable([1, 2, 3])
+ * Iterant([1, 2, 3])
  *   .concat(4, 5, [6, 7]);
- * // Iterable([1, 2, 3, 4, 5, 6, 7])
+ * // Iterant([1, 2, 3, 4, 5, 6, 7])
  * 
  * @param {...*} items - Items to concatenate
- * @returns {Iterable} - A new {@link Iterable} instance
+ * @returns {Iterant} - A new {@link Iterant} instance
  */
-Iterable.prototype.concat = function concat(...items) {
-  const Constructor = this._iterable[Symbol.species] || Iterable; 
+Iterant.prototype.concat = function concat(...items) {
+  const Constructor = this._iterable[Symbol.species] || Iterant; 
   return Constructor(
-    Iterable.concat(this._iterable, ...items)
+    Iterant.concat(this._iterable, ...items)
   );
 };
 /**
@@ -398,9 +398,9 @@ Iterable.prototype.concat = function concat(...items) {
  *   * **`a`** (`any`) The current item
  *   * **`b`** (`any`) The next item
  *   * Returns `number` - `-1` if `a < b`, `1` if `a > b`, and `0` if they’re equal.
- * @returns {IterableArray} - A sorted {@IterableArray}
+ * @returns {IterantArray} - A sorted {@IterantArray}
  */
-Iterable.prototype.sort = function sort(comparator) {
+Iterant.prototype.sort = function sort(comparator) {
   if(undefined !== comparator && 'function' !== typeof comparator) {
     throw new TypeError('comparator must be a function');
   }
@@ -411,30 +411,30 @@ Iterable.prototype.sort = function sort(comparator) {
     return   1;
   }
   comparator = comparator || defaultComparator;
-  return IterableArray(
+  return IterantArray(
     Array.from(this).sort(comparator)
   );
 };
 /**
- * Creates a new shallow copy of the {@link Iterable}.
+ * Creates a new shallow copy of the {@link Iterant}.
  * 
  * @example
- * const a = Iterable([1, 2, 3]);
+ * const a = Iterant([1, 2, 3]);
  * const b = a.clone();
  * a !== b; // true
  * 
- * @returns {Iterable} - A new {@link Iterable} instance
+ * @returns {Iterant} - A new {@link Iterant} instance
  */
-Iterable.prototype.clone = function clone() {
+Iterant.prototype.clone = function clone() {
   return this[Symbol.species](this._iterator);
 };
 /**
- * Converts an {@link Iterable} to an {@link Array}. 
+ * Converts an {@link Iterant} to an {@link Array}. 
  * This is a pass-through for {@link Array~from} that’s convenient for chaining.
  * 
  * @example
  * function* gen() { for(let i = 0; i < 10; i++) { yield [String(i), i]; }};
- * Iterable(new Map(gen))
+ * Iterant(new Map(gen))
  *   .toArray();
  * 
  * =>
@@ -451,7 +451,7 @@ Iterable.prototype.clone = function clone() {
  * 
  * @returns {@link Array}
  */
-Iterable.prototype.toArray = function toArray() {
+Iterant.prototype.toArray = function toArray() {
   return Array.from(this);
 };
 
