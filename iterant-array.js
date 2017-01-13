@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
- 
- 'use strict';
-
+'use strict';
 module.exports = IterantArray;
 const Iterant = require('./iterant');
 
@@ -33,11 +31,13 @@ const Iterant = require('./iterant');
  * @throws {TypeError} - If `array` is not an {@link Array}
  */
 function IterantArray(array) {
-  if(!Array.isArray(array)) { 
-    throw new TypeError('Can only wrap an Array'); 
+  if (!Array.isArray(array)) {
+    throw new TypeError('Can only wrap an Array');
   }
-  if(!this) { return new IterantArray(array); }
-  return Iterant.call(this, array); 
+  if (!this) {
+    return new IterantArray(array);
+  }
+  return Iterant.call(this, array);
 }
 // Inherit from Iterant
 IterantArray.prototype = Object.create(Iterant.prototype);
@@ -53,7 +53,7 @@ IterantArray.prototype[Symbol.toStringTag] = 'IterantArray';
  * 
  * @see Array#slice
  */
-IterantArray.prototype.slice = function slice(begin, end) { 
+IterantArray.prototype.slice = function slice(begin, end) {
   return IterantArray(this._iterable.slice(begin, end));
 };
 /**

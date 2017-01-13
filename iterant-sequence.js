@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
- 
- 'use strict';
-
+'use strict';
 module.exports = IterantSequence;
 const Iterant = require('./iterant');
 
@@ -37,15 +35,17 @@ const Iterant = require('./iterant');
  * @throws {TypeError} - If `seqeuence` is not a {@link Sequence}
  */
 function IterantSequence(sequence) {
-  if(!(sequence instanceof Sequence)) { 
-    throw new TypeError('Can only wrap a Sequence'); 
+  if (!(sequence instanceof Sequence)) {
+    throw new TypeError('Can only wrap a Sequence');
   }
-  if(!this) { return new IterantSequence(sequence); }
-  return Iterant.call(this, sequence); 
+  if (!this) {
+    return new IterantSequence(sequence);
+  }
+  return Iterant.call(this, sequence);
 }
 
 // Inherit from Iterant
-IterantSequence.prototype = Object.create(Iterant.prototype); 
+IterantSequence.prototype = Object.create(Iterant.prototype);
 
 IterantSequence.prototype[Symbol.toStringTag] = 'IterantSequence';
 IterantSequence.prototype[Symbol.species] = IterantSequence;
@@ -73,17 +73,20 @@ IterantSequence.prototype[Symbol.species] = IterantSequence;
  * @param {number} [end]  Zero-based end index, not inclusive.
  * @returns {IterantSequence} A shallow copy of the sliced {@link Sequence}
  */
-IterantSequence.prototype.slice = function(begin, end) { 
+IterantSequence.prototype.slice = function(begin, end) {
   let seq;
-  if(undefined === begin) {
+  if (undefined === begin) {
     return IterantSequence(this._iterable);
   }
-  if('number' !== typeof begin || begin < 0 || 0 !== begin % 1) { 
-    throw new TypeError('begin must be a positive integer'); 
+  if ('number' !== typeof begin || begin < 0 || 0 !== begin % 1) {
+    throw new TypeError('begin must be a positive integer');
   }
-  if(end) {
-    if('number' !== typeof end || end < 0 || 0 !== end % 1 || end < begin) { 
-      throw new TypeError('end must be a positive integer greater than begin (' + String(begin) + ')'); 
+  if (end) {
+    if ('number' !== typeof end || end < 0 || 0 !== end % 1 || end < begin) {
+      throw new TypeError(
+        'end must be a positive integer greater than begin (' + String(begin) +
+          ')'
+      );
     }
     seq = fn.subsequence(this._iterable, begin + 1, end - begin);
   } else {
@@ -91,42 +94,44 @@ IterantSequence.prototype.slice = function(begin, end) {
   }
   return IterantSequence(seq);
 };
-//map(mapper, that) { },
-//reduce(reducer, init) { },
-//filter(predicate, that) { },
+// map(mapper, that) { },
+// reduce(reducer, init) { },
+// filter(predicate, that) { },
 IterantSequence.prototype.concat = function(...args) {
-  if(0 === args.length) {
+  if (0 === args.length) {
     return IterantSequence(this._iterable);
   }
-  return IterantSequence(
-    new Sequence(this._iterable, ...args.map(
-      (item) => Iterant.isIterable(item, true) ? 
-                 Sequence.from(item) : 
-                 new Sequence(item)
-    ))
-  );
+  return IterantSequence(new Sequence(
+    this._iterable,
+    ...args.map(
+      item =>
+        Iterant.isIterable(item, true)
+          ? Sequence.from(item)
+          : new Sequence(item)
+    )
+  ));
 };
-IterantSequence.prototype.sort = function(comparator) { 
-  if(console && 'function' === typeof console.warn) {
-    console.warn('Sort in the database query where possible. This won’t scale for large Sequences.');
+IterantSequence.prototype.sort = function(comparator) {
+  if (console && 'function' === typeof console.warn) {
+    console.warn(
+      'Sort in the database query where possible. This won’t scale for large Sequences.'
+    );
   }
   return Iterant.prototype.sort.call(this, comparator);
 };
 // FIXME: This doesn't depend on Sequence. Might want to do XPath on any type of iterable, no?
-IterantSequence.prototype.xpath = function(path, bindings, that) {
-  if(null === path || 'undefined' === typeof path) { 
-    throw new TypeError('path must be a string of XPath'); 
+IterantSequence.prototype.xpath = function(path, bindings) {
+  if (null === path || 'undefined' === typeof path) {
+    throw new TypeError('path must be a string of XPath');
   }
   return Iterant(
-    Iterant.delegate(
-      this._iterable, 
-      function*(item){
-        if(item instanceof Node 
-          || item instanceof Document 
-          || 'function' === typeof item.xpath) {
-          yield* item.xpath(path, bindings);
-        }
+    Iterant.delegate(this._iterable, function*(item) {
+      if (
+        item instanceof Node || item instanceof Document ||
+          'function' === typeof item.xpath
+      ) {
+        yield* item.xpath(path, bindings);
       }
-    )
+    })
   );
 };

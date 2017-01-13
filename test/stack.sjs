@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
- 
 'use strict';
-
 const test = require('/mltap/test');
 
 const IterantArray = require('../iterant-array');
 
-test('Stack frames', (assert) => {
+test('Stack frames', assert => {
   const iterable = IterantArray([1, 2, 3]);
   try {
-    iterable
-      .map((item) => { throw new Error(); });
+    iterable.map(() => {
+      throw new Error();
+    });
     Array.from(iterable);
   } catch (error) {
     const frames = error.stack ? error.stack.split('\n') : undefined;

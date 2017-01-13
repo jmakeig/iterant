@@ -11,10 +11,7 @@ module.exports = {
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
         "arrow-body-style": "error",
-        "arrow-parens": [
-            "error",
-            "always"
-        ],
+        "arrow-parens": "off",
         "arrow-spacing": [
             "error",
             {
@@ -88,7 +85,7 @@ module.exports = {
             "unix"
         ],
         "lines-around-comment": "off",
-        "lines-around-directive": "error",
+        "lines-around-directive": "off",
         "max-depth": "error",
         "max-len": "off",
         "max-lines": "off",
@@ -96,10 +93,7 @@ module.exports = {
         "max-params": "error",
         "max-statements": "off",
         "max-statements-per-line": "off",
-        "multiline-ternary": [
-            "error",
-            "always"
-        ],
+        "multiline-ternary": "off",
         "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
@@ -111,6 +105,7 @@ module.exports = {
         "no-caller": "error",
         "no-catch-shadow": "error",
         "no-confusing-arrow": "off",
+        "no-console": "warn",
         "no-continue": "error",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
@@ -127,7 +122,7 @@ module.exports = {
         "no-implicit-globals": "error",
         "no-implied-eval": "error",
         "no-inline-comments": "off",
-        "no-invalid-this": "error",
+        "no-invalid-this": "warn",
         "no-iterator": "error",
         "no-label-var": "error",
         "no-labels": "error",
@@ -176,6 +171,7 @@ module.exports = {
         "no-ternary": "off",
         "no-throw-literal": "error",
         "no-trailing-spaces": "off",
+        "no-undef": "warn",
         "no-undef-init": "error",
         "no-undefined": "off",
         "no-unmodified-loop-condition": "error",
@@ -241,7 +237,7 @@ module.exports = {
         ],
         "space-infix-ops": "error",
         "space-unary-ops": "error",
-        "spaced-comment": "off",
+        "spaced-comment": "error",
         "strict": "error",
         "symbol-description": "error",
         "template-curly-spacing": "error",

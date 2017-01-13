@@ -13,37 +13,41 @@
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
- 
 'use strict';
-
 const test = require('/mltap/test');
 
 const Iterant = require('../iterant');
 
-test('Arrays are iterable', (assert) => {
+test('Arrays are iterable', assert => {
   assert.true(Iterant.isIterable([]), 'Empty array');
   assert.true(Iterant.isIterable([], true), 'Ignore strings doesn’t matter');
   assert.true(Iterant.isIterable([], false), 'Ignore strings doesn’t matter');
   assert.end();
 });
 
-test('Strings are iterable (unfortunately)', (assert) => {
+test('Strings are iterable (unfortunately)', assert => {
   assert.true(Iterant.isIterable('asdf'), 'String');
   assert.true(Iterant.isIterable(''), 'Empty string');
-  assert.true(Iterant.isIterable('asdf', false), 'Ignore strings explicit false');
+  assert.true(
+    Iterant.isIterable('asdf', false),
+    'Ignore strings explicit false'
+  );
   assert.false(Iterant.isIterable('asdf', true), 'Ignore strings');
   assert.end();
 });
 
-test('Custom iterable', (assert) => {
+test('Custom iterable', assert => {
   const itr = {
-    [Symbol.iterator]: function*() {} // eslint-disable-line no-empty-function
+    // eslint-disable-line no-empty-function
+    [Symbol.iterator]: function*() {
+      yield undefined;
+    }
   };
   assert.true(Iterant.isIterable(itr), 'Custom object');
   assert.end();
 });
 
-test('Non-iterables', (assert) => {
+test('Non-iterables', assert => {
   assert.false(Iterant.isIterable(null), 'null');
   assert.false(Iterant.isIterable(undefined), 'undefined');
   assert.false(Iterant.isIterable(NaN), 'NaN');
